@@ -1,4 +1,4 @@
-55ea0362-a8d7-4145-9450-3813df30cd87:
+git_pull_origin:
   alias: Git Pull Origin
   sequence:
     - service: shell_command.git_pull
