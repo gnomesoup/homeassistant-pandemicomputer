@@ -1,0 +1,42 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+notify:
+  - name: gmail
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: !secret gmail_recipient_2
+    encryption: starttls
+    username: !secret gmail_recipient_2
+    password: !secret gmail_password
+    recipient:
+      - !secret gmail_recipient_1
+      - !secret gmail_recipient_2
+    sender_name: Pandemicabin
+
+recorder:
+  db_url: !secret mariadb_url
+
+alarm_control_panel:
+  - platform: manual
+    name: Alarm
+    arming_time: 30
+    delay_time: 5
+    trigger_time: 60
+    disarmed:
+      trigger_time: 0
+    armed_home:
+      arming_time: 0
+      delay_time: 0
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml

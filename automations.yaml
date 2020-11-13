@@ -1,0 +1,189 @@
+- id: '1604357736956'
+  alias: Alert when temperatures are low
+  description: ''
+  trigger:
+  - type: temperature
+    platform: device
+    device_id: 780eb4a06d73cd665382dd2c0d921f7d
+    entity_id: sensor.lumi_lumi_weather_5aac8205_temperature
+    domain: sensor
+    below: 35
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  - type: temperature
+    platform: device
+    device_id: cb2cb27897a4790cb66cbe22ee77ed15
+    entity_id: sensor.lumi_lumi_weather_64aa8205_temperature
+    domain: sensor
+    below: 50
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: notify.gmail
+    data_template:
+      title: Pandemicabin Alert
+      message: '{{state_attr(trigger.entity_id, "friendly_name")}} is {{trigger.to_state.state}}°F'
+  mode: single
+- id: '1604383268941'
+  alias: Notify when smoke detected
+  description: ''
+  trigger:
+  - type: smoke
+    platform: device
+    device_id: d4cd0c36dd3a19c9e5569b206439d88c
+    entity_id: binary_sensor.unknown_type_0001_id_0003_smoke_alarm_smoke_detected
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: notify.gmail
+    data:
+      title: Pandemicabin Alert
+      message: Smoke Detected
+  mode: single
+- id: '1604383451997'
+  alias: Notify when carbon monoxide detected
+  description: ''
+  trigger:
+  - type: gas
+    platform: device
+    device_id: d4cd0c36dd3a19c9e5569b206439d88c
+    entity_id: binary_sensor.unknown_type_0001_id_0003_carbon_monoxide_carbon_monoxide_detected
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: notify.gmail
+    data:
+      title: Pandemicabin Alert
+      message: Carbon monoxide detected
+  mode: single
+- id: '1604460928355'
+  alias: Thermostat Automation Weekday 1
+  description: Set heat based on a schedule
+  trigger:
+  - platform: time
+    at: input_datetime.heat_weekday_1
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  action:
+  - service: input_number.set_value
+    data:
+      value: '{{states.input_number.heat_setpoint_weekday_1.state}}'
+    entity_id: input_number.heat_auto_setpoint
+  mode: single
+- id: '1604461665066'
+  alias: Thermostat Automation Weekday 2
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.heat_weekday_2
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - sun
+  action:
+  - service: input_number.set_value
+    entity_id: input_number.heat_auto_setpoint
+    data:
+      value: '{{states.input_number.heat_setpoint_weekday_2.state}}'
+  mode: single
+- id: '1604544737759'
+  alias: Thermostat Automation Weekend 1
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.heat_weekend_1
+  condition:
+  - condition: time
+    weekday:
+    - sat
+    - sun
+  action:
+  - service: input_number.set_value
+    data:
+      value: '{{states.input_number.heat_setpoint_weekend_1.state}}'
+    entity_id: input_number.heat_auto_setpoint
+  mode: single
+- id: '1604544994545'
+  alias: Thermostat Automation Weekend 2
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.heat_weekend_2
+  condition:
+  - condition: time
+    weekday:
+    - fri
+    - sat
+  action:
+  - service: input_number.set_value
+    data:
+      value: '{{states.input_number.heat_setpoint_weekend_2.state}}'
+    entity_id: input_number.heat_auto_setpoint
+  mode: single
+- id: '1604546145850'
+  alias: Thermostat Update From Auto Setpoint
+  description: Take the value sent to the Heat Auto Setpoint and push to thermostat
+  trigger:
+  - platform: state
+    entity_id: input_number.heat_auto_setpoint
+  - platform: state
+    entity_id: input_boolean.thermostat_hold_temp
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: input_boolean.thermostat_hold_temp
+    state: 'off'
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: '{{states.input_number.heat_auto_setpoint.state}}'
+    entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+  mode: single
+- id: '1604803745717'
+  alias: Thermostat set when away
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.heat_away
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: '{{states.input_number.heat_setpoint_away.state}}'
+    entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+  - service: input_boolean.turn_on
+    data: {}
+    entity_id: input_boolean.thermostat_hold_temp
+  mode: single
+- id: '1604803985924'
+  alias: Thermostat set when return
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.heat_away
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    entity_id: input_boolean.thermostat_hold_temp
+  mode: single
