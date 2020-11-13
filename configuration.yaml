@@ -36,6 +36,9 @@ alarm_control_panel:
       arming_time: 0
       delay_time: 0
 
+shell_command:
+  git_pull: 'git pull origin'
+
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
