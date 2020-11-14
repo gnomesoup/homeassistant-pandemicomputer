@@ -208,5 +208,5 @@
   - service: notify.persistent_notification
     data:
       title: Battery Low Alert
-      message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.state}}%'
+      message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.to_state.state}}%'
 
