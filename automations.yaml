@@ -203,7 +203,7 @@
     - sensor.gc_tbz48_battery_powered_z_wave_thermostat_battery_level
     - sensor.unknown_type_0001_id_0003_battery_level
     - sensor.zse40_4_in_1_sensor_battery_level
-    below: 80
+    below: 40
   action:
   - service: notify.persistent_notification
     data:
