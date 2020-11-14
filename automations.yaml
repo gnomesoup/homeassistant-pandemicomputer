@@ -187,3 +187,19 @@
     data: {}
     entity_id: input_boolean.thermostat_hold_temp
   mode: single
+- id: '1605281259031'
+  alias: Battery Low Alert
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: >-
+      {% for state in states.sensor if state.name 
+          | lower | regex_search('power|battery') -%}
+        {{ state.entity_id }}
+      {% endfor %}
+  action:
+  - service: notify.persistent_notification
+    data:
+      title: Battery Low Alert
+      message: '{{state_attr(trigger.entity_id, "friendly_name")}}'
+
