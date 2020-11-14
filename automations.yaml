@@ -192,7 +192,7 @@
   description: ''
   mode: parallel
   trigger:
-  - platform: state
+  - platform: numeric_state
     entity_id: 
     - sensor.lumi_lumi_weather_5aac8205_power
     - sensor.lumi_lumi_weather_64aa8205_power
@@ -203,6 +203,7 @@
     - sensor.gc_tbz48_battery_powered_z_wave_thermostat_battery_level
     - sensor.unknown_type_0001_id_0003_battery_level
     - sensor.zse40_4_in_1_sensor_battery_level
+    below: 80
   action:
   - service: notify.persistent_notification
     data:
