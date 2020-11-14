@@ -2,6 +2,9 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+homeassistant:
+  legacy_templates: false
+
 # Text to speech
 tts:
   - platform: google_translate
