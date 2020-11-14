@@ -190,16 +190,22 @@
 - id: '1605281259031'
   alias: Battery Low Alert
   description: ''
+  mode: parallel
   trigger:
   - platform: state
-    entity_id: >-
-      {% for state in states.sensor if state.name 
-          | lower | regex_search('power|battery') -%}
-        {{ state.entity_id }}
-      {% endfor %}
+    entity_id: 
+    - sensor.lumi_lumi_weather_5aac8205_power
+    - sensor.lumi_lumi_weather_64aa8205_power
+    - sensor.samjin_multi_0e220d01_power
+    - sensor.samjin_multi_cc1d0d01_power
+    - sensor.samjin_multi_dd210d01_power
+    - sensor.samjin_multi_fcd00d01_power
+    - sensor.gc_tbz48_battery_powered_z_wave_thermostat_battery_level
+    - sensor.unknown_type_0001_id_0003_battery_level
+    - sensor.zse40_4_in_1_sensor_battery_level
   action:
   - service: notify.persistent_notification
     data:
       title: Battery Low Alert
-      message: '{{state_attr(trigger.entity_id, "friendly_name")}}'
+      message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.state}}%'
 
