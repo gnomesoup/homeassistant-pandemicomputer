@@ -192,21 +192,43 @@
   description: ''
   mode: parallel
   trigger:
-  - platform: numeric_state
-    entity_id: 
-    - sensor.lumi_lumi_weather_5aac8205_power
-    - sensor.lumi_lumi_weather_64aa8205_power
-    - sensor.samjin_multi_0e220d01_power
-    - sensor.samjin_multi_cc1d0d01_power
-    - sensor.samjin_multi_dd210d01_power
-    - sensor.samjin_multi_fcd00d01_power
-    - sensor.gc_tbz48_battery_powered_z_wave_thermostat_battery_level
-    - sensor.unknown_type_0001_id_0003_battery_level
-    - sensor.zse40_4_in_1_sensor_battery_level
-    below: 40
+    - platform: numeric_state
+      entity_id: 
+        - sensor.lumi_lumi_weather_5aac8205_power
+        - sensor.lumi_lumi_weather_64aa8205_power
+        - sensor.samjin_multi_0e220d01_power
+        - sensor.samjin_multi_cc1d0d01_power
+        - sensor.samjin_multi_dd210d01_power
+        - sensor.samjin_multi_fcd00d01_power
+        - sensor.gc_tbz48_battery_powered_z_wave_thermostat_battery_level
+        - sensor.unknown_type_0001_id_0003_battery_level
+        - sensor.zse40_4_in_1_sensor_battery_level
+        - sensor.lumi_lumi_sensor_magnet_aq2_e4a8a902_power
+      below: 40
   action:
   - service: notify.persistent_notification
     data:
       title: Battery Low Alert
       message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.to_state.state}}%'
-
+- id: '1605406740002'
+  alias: Notify on door window event
+  trigger:
+    - platform: state
+      from: "off"
+      to: "on"
+      entity_id:
+        - binary_sensor.samjin_multi_0e220d01_ias_zone
+        - binary_sensor.samjin_multi_cc1d0d01_ias_zone
+        - binary_sensor.samjin_multi_dd210d01_ias_zone
+        - binary_sensor.samjin_multi_fcd00d01_ias_zone
+        - binary_sensor.lumi_lumi_sensor_magnet_aq2_e4a8a902_on_off
+  condition:
+    - condition: state
+      entity_id: 
+        - input_boolean.notify_on_door_window_events
+      state: "on"
+  action:
+  - service: notify.gmail
+    data_template:
+      title: Pandemicabin Alert
+      message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
