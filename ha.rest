@@ -1,0 +1,31 @@
+GET {{host}}/api/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept-Encoding: gzip
+
+### Get timestamp for automation id
+POST {{host}}/api/template
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept-Encoding: gzip
+
+{
+    "template": 
+        "{{ (now() | as_timestamp | replace('.', ''))[0:13] }}"
+}
+
+### Run git pull
+POST {{host}}/api/services/homeassistant/turn_on
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept-Encoding: gzip
+
+{
+    "entity_id": "script.git_pull_origin"
+}
+
+### Get services
+GET {{host}}/api/services
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept-Encoding: gzip
