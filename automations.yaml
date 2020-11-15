@@ -232,3 +232,20 @@
     data_template:
       title: Pandemicabin Alert
       message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
+- id: "1605457574856"
+  alias: Alarm turn on alerts
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.alarm
+      from: disarmed
+  action:
+    - service: >-
+        {% if trigger.to_state.state == 'disarmed' -%} 
+          input_boolean.turn_off
+        {%- else -%}
+          input_boolean.turn_on
+        {%- endif %}
+      data:
+        entity_id: 
+          - input_boolean.notify_on_door_window_events
+          - script.git_pull_origin
