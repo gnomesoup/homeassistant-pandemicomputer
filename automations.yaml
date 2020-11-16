@@ -246,7 +246,7 @@
         {%- endif %}
       data:
         entity_id: >-
-          {% if trigger.to_state.state == 'arm_home' -%}
+          {% if trigger.to_state.state == 'armed_home' -%}
             input_boolean.notify_on_door_window_events
           {%- else -%}
             input_boolean.notify_on_door_window_events, input_boolean.notify_on_motion
