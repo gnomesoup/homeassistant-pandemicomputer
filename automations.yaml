@@ -287,3 +287,26 @@
           {%- else -%}
             input_boolean.notify_on_door_window_events, input_boolean.notify_on_motion, input_boolean.notify_on_motion_garage
           {%- endif %}
+- id: "1605533510025"
+  alias: Alarm self arm home when disarmed
+  trigger:
+    - platform: state
+      entity_id: 
+        - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected_2
+      from: "on"
+      to: "off"
+      for: 60
+  condition:
+    - condition: time
+      after: "23:00:00"
+      before: "04:00:00"
+    - condition: state
+      entity_id: alarm_control_panel.alarm
+      state: disarmed
+    - condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
+  action:
+    - service: alarm_control_panel.alarm_arm_home
+      data:
+        entity_id: entity_id
