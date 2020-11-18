@@ -326,15 +326,19 @@
       from: "off"
       to: "on"
   condition:
-    - condition: time
-      after: "05:00:00"
-      before: "12:00:00"
+    # - condition: time
+    #   after: "05:00:00"
+    #   before: "12:00:00"
     - condition: state
       entity_id: alarm_control_panel.alarm
       state: armed_home
     - condition: state
       entity_id: input_boolean.guest_mode
       state: "off"
+    - condition: template
+      value_template: >-
+        {{ 15 < (as_timestamp(utcnow()) - 
+            as_timestamp(states.binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected_2.last_changed)) }}
   action:
     - service: alarm_control_panel.alarm_disarm
       data:
