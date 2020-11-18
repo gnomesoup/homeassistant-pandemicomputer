@@ -264,7 +264,7 @@
   condition:
     - condition: state
       entity_id:
-        -  
+        - input_boolean.notify_on_motion_garage
       state: "on"
   action:
     - service: notify.gmail
