@@ -250,6 +250,9 @@
       data_template:
         title: Pandemicabin Alert
         message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
+    - service: alarm_control_panel.alarm_trigger
+      data:
+        entity_id: alarm_control_panel.alarm
 - id: "1605492586935"
   alias: Notify on motion garage
   trigger:
@@ -290,9 +293,6 @@
           {%- else -%}
             input_boolean.notify_on_door_window_events, input_boolean.notify_on_motion, input_boolean.notify_on_motion_garage
           {%- endif %}
-    - service: alarm_control_panel.alarm_trigger
-      data:
-        entity_id: alarm_control_panel.alarm
 - id: "1605533510025"
   alias: Alarm self arm home when disarmed
   trigger:
