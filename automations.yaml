@@ -232,6 +232,9 @@
       data_template:
         title: Pandemicabin Alert
         message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
+    - service: alarm_control_panel.alarm_trigger
+      data:
+        entity_id: alarm_control_panel.alarm
 - id: "1605491801008"
   alias: Notify on motion house
   trigger:
@@ -326,9 +329,9 @@
       from: "off"
       to: "on"
   condition:
-    # - condition: time
-    #   after: "05:00:00"
-    #   before: "12:00:00"
+    - condition: time
+      after: "05:00:00"
+      before: "12:00:00"
     - condition: state
       entity_id: alarm_control_panel.alarm
       state: armed_home
