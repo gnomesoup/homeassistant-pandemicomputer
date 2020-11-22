@@ -29,3 +29,14 @@ GET {{host}}/api/services
 Authorization: Bearer {{token}}
 Content-Type: application/json
 Accept-Encoding: gzip
+
+### Template testing
+POST {{host}}/api/template
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept-Encoding: gzip
+
+{
+    "template": 
+        "{{ ( state("sensor.lumi_lumi_weather_64aa8205_temperature") + state("sensor.zse40_4_in_1_state("_air_temperature_2") + state("sensor.samjin_multi_0e220d01_temperature") + state("sensor.samjin_multi_cc1d0d01_temperature") + state("sensor.samjin_multi_dd210d01_temperature") + state("sensor.samjin_multi_fcd00d01_temperature") + state("sensor.gc_tbz48_battery_powered_z_wave_thermostat_air_temperature")) / 7 }}"
+}
