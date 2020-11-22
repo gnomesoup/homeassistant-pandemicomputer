@@ -1,0 +1,42 @@
+group:
+  temperature_sensors_indoor:
+    name: Indoor Temperature Sensors
+    entities:
+      - sensor.lumi_lumi_weather_64aa8205_temperature
+      - sensor.zse40_4_in_1_sensor_air_temperature_2
+      - sensor.samjin_multi_0e220d01_temperature
+      - sensor.samjin_multi_cc1d0d01_temperature
+      - sensor.samjin_multi_dd210d01_temperature
+      - sensor.samjin_multi_fcd00d01_temperature
+      - sensor.gc_tbz48_battery_powered_z_wave_thermostat_air_temperature
+  humidity_sensors_indoor:
+    name: Indoor Humidity Sensors
+    entities:
+      - sensor.lumi_lumi_weather_64aa8205_humidity
+      - sensor.zse40_4_in_1_sensor_humidity_2
+sensor:
+  - platform: template
+    sensors:
+      humidity_overall:
+        friendly_name: Overall Humidity
+        value_template: >-
+          {{
+            ((
+              states("sensor.lumi_lumi_weather_64aa8205_humidity")|float +
+              states("sensor.zse40_4_in_1_sensor_humidity_2")|float
+            ) / 2) | round(1)
+          }}
+      temperature_overall:
+        friendly_name: Overall Temperature
+        value_template: >-
+          {{ 
+            ((
+              states("sensor.lumi_lumi_weather_64aa8205_temperature")|float * 2 + 
+              states("sensor.zse40_4_in_1_sensor_air_temperature_2")|float * 2 +
+              states("sensor.samjin_multi_0e220d01_temperature")|float +
+              states("sensor.samjin_multi_cc1d0d01_temperature")|float * 0.5 +
+              states("sensor.samjin_multi_dd210d01_temperature")|float * 0.5 +
+              states("sensor.samjin_multi_fcd00d01_temperature")|float  + 
+              states("sensor.gc_tbz48_battery_powered_z_wave_thermostat_air_temperature")|float * 3
+            ) / 10) | round(1)
+          }}

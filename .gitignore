@@ -4,5 +4,6 @@
 *.log
 secrets.yaml
 /*/
+!/packages
 
 *.code-workspace

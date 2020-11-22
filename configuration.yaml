@@ -4,6 +4,7 @@ default_config:
 
 homeassistant:
   legacy_templates: false
+  packages: !include_dir_named packages/
 
 # Text to speech
 tts:

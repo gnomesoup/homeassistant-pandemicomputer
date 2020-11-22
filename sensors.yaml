@@ -10,4 +10,3 @@
     sunset:
       friendly_name: "Next Sunset Time"
       value_template: "{{ state_attr('sun.sun', 'next_setting') | as_timestamp | timestamp_custom('%H:%M') }}"
-
