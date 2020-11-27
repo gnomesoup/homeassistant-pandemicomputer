@@ -1,0 +1,9 @@
+binary_sensor:
+  - name: master_ha_notify
+    platform: rest
+    resource: http://192.168.100.102:8122/api/
+    headers:
+      Authorization: !secret master_ha_header
+      Content-Type: application/json
+    value_template: >-
+      {{ value_json.message == "API running." }}
