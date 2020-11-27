@@ -1,0 +1,8 @@
+notify:
+  - name: master_ha_michael
+    platform: rest
+    resource: http://192.168.100.102/api/services/notify/mobil_app_ergisch
+    method: POST_JSON
+    headers: !secret master_ha_header
+    title_param_name: title
+    message_param_name: message
