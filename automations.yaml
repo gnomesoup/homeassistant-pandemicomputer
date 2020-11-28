@@ -355,7 +355,7 @@
         - binary_sensor.samjin_multi_fcd00d01_ias_zone
       from:  'off'
       to: 'on'
-      for: 5
+      for: 00:05:00
   condition:
     - condition: state
       entity_id:
