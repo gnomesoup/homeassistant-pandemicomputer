@@ -10,21 +10,6 @@ homeassistant:
 tts:
   - platform: google_translate
 
-notify:
-  - name: gmail
-    platform: smtp
-    server: smtp.gmail.com
-    port: 587
-    timeout: 15
-    sender: !secret gmail_recipient_2
-    encryption: starttls
-    username: !secret gmail_recipient_2
-    password: !secret gmail_password
-    recipient:
-      - !secret gmail_recipient_1
-      - !secret gmail_recipient_2
-    sender_name: Pandemicabin
-
 recorder:
   db_url: !secret mariadb_url
 
