@@ -47,8 +47,8 @@ notify:
   - name: local_methods
     platform: group
     services:
-      - service: notify.gmail
-      - service: notify.huawei_lte
+      - service: gmail
+      - service: huawei_lte
   
 script:
   notify_conditional:
