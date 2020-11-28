@@ -19,14 +19,17 @@ notify:
 script:
   notify_conditional:
     alias: 'Notify based on availablity of notifiers'
+    description: ''
     fields:
       recipient:
         description: 'Who to notify'
         example: '[all|michael|angela|camille]'
       title:
         description: 'Title of the notification'
+        example: 'Message Title'
       message:
         description: 'Message of the notification'
+        example: 'Message body'
     sequence:
       service: >-
         {%- if states("binary_sensor.master_ha_api") != "on" -%}
