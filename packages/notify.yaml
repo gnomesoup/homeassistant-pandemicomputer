@@ -1,4 +1,12 @@
 notify:
+  - name: master_ha_notify
+    platform: rest
+    resource: http://192.168.100.102:8122/api/services/notify/notify
+    method: POST_JSON
+    headers:
+      Authorization: !secret master_ha_header
+    title_param_name: title
+    message_param_name: message
   - name: master_ha_michael
     platform: rest
     resource: http://192.168.100.102:8122/api/services/notify/mobile_app_ergisch
@@ -7,3 +15,31 @@ notify:
       Authorization: !secret master_ha_header
     title_param_name: title
     message_param_name: message
+  
+script:
+  notify_conditional:
+    alias: 'Notify based on availablity of notifiers'
+    fields:
+      recipient:
+        description: 'Who to notify'
+        example: '[all|michael|angela|camille]'
+      title:
+        description: 'Title of the notification'
+      message:
+        description: 'Message of the notification'
+    sequence:
+      service: >-
+        {%- if states("binary_sensor.master_ha_api") != "on" -%}
+          notify.gmail
+        {%- elif recipient == "michael" -%}
+          notify.master_ha_michael
+        {%- elif recipient == "angela" -%}
+          notify.master_ha_angela
+        {%- elif recipient == "camille" -%}
+          notify.master_ha_camille
+        {%- else -%}
+          notify.master_ha_notify
+        {%- endif -%}
+      data:
+        title: {{ title }}
+        message: {{ message }}
