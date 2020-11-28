@@ -44,5 +44,5 @@ script:
           notify.master_ha_notify
         {%- endif -%}
       data:
-        title: {{ title }}
-        message: {{ message }}
+        title: "{{ title }}"
+        message: "{{ message }}"
