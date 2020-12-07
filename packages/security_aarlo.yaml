@@ -1,0 +1,44 @@
+aarlo:
+  username: !secret arlo_username
+  password: !secret arlo_password
+  refresh_devices_every: 2
+  stream_timeout: 120
+
+alarm_control_panel:
+  - platform: aarlo
+    away_mode_name: armed
+    home_mode_name: Home
+    night_mode_name: night
+    trigger_time: 60
+    alarm_volume: 8
+
+camera:
+  - platform: aarlo
+
+binary_sensor:
+  - platform: aarlo
+    monitored_conditions:
+    - motion
+    - sound
+    - connectivity
+
+sensor:
+  - platform: aarlo
+    monitored_conditions:
+    - total_cameras
+    - last_capture
+    - recent_activity
+    - captured_today
+    - battery_level
+    - signal_strength
+
+light:
+  - platform: aarlo
+
+switch:
+  - platform: aarlo
+    siren: True
+    all_sirens: True
+    snapshot: True
+    siren_volume: 1
+    siren_duration: 10
