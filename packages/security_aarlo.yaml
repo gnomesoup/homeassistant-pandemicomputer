@@ -18,19 +18,19 @@ camera:
 binary_sensor:
   - platform: aarlo
     monitored_conditions:
-    - motion
-    - sound
-    - connectivity
+      - motion
+      - sound
+      - connectivity
 
 sensor:
   - platform: aarlo
     monitored_conditions:
-    - total_cameras
-    - last_capture
-    - recent_activity
-    - captured_today
-    - battery_level
-    - signal_strength
+      - total_cameras
+      - last_capture
+      - recent_activity
+      - captured_today
+      - battery_level
+      - signal_strength
 
 light:
   - platform: aarlo
