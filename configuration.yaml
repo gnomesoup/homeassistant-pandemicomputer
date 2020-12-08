@@ -10,9 +10,6 @@ homeassistant:
 tts:
   - platform: google_translate
 
-recorder:
-  db_url: !secret mariadb_url
-
 alarm_control_panel:
   - platform: manual
     name: Alarm
