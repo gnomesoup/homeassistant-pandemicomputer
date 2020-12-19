@@ -22,7 +22,7 @@ notify:
     message_param_name: message
   - name: master_ha_michael
     platform: rest
-    resource: http://192.168.100.102:8122/api/services/notify/mobile_app_ergisch
+    resource: http://192.168.100.102:8122/api/services/notify/michael
     method: POST_JSON
     headers:
       Authorization: !secret master_ha_header
@@ -30,7 +30,7 @@ notify:
     message_param_name: message
   - name: master_ha_angela
     platform: rest
-    resource: http://192.168.100.102:8122/api/services/notify/mobile_app_iphone
+    resource: http://192.168.100.102:8122/api/services/notify/angela
     method: POST_JSON
     headers:
       Authorization: !secret master_ha_header
@@ -38,7 +38,7 @@ notify:
     message_param_name: message
   - name: master_ha_camille
     platform: rest
-    resource: http://192.168.100.102:8122/api/services/notify/mobile_app_moto_g_7_play
+    resource: http://192.168.100.102:8122/api/services/notify/camille
     method: POST_JSON
     headers:
       Authorization: !secret master_ha_header
@@ -65,18 +65,20 @@ script:
         description: 'Message of the notification'
         example: 'Message body'
     sequence:
-      service: >-
-        {%- if states("binary_sensor.master_ha_api") != "on" -%}
-          notify.local_methods
-        {%- elif recipient == "michael" -%}
-          notify.master_ha_michael
-        {%- elif recipient == "angela" -%}
-          notify.master_ha_angela
-        {%- elif recipient == "camille" -%}
-          notify.master_ha_camille
-        {%- else -%}
-          notify.master_ha_notify
-        {%- endif -%}
-      data:
-        title: "{{ title }}"
-        message: "{{ message }}"
+      - service: homeassistant.update_entity
+        entity_id: binary_sensor.master_ha_api
+      - service: >-
+          {%- if states("binary_sensor.master_ha_api") != "on" -%}
+            notify.local_methods
+          {%- elif recipient == "michael" -%}
+            notify.master_ha_michael
+          {%- elif recipient == "angela" -%}
+            notify.master_ha_angela
+          {%- elif recipient == "camille" -%}
+            notify.master_ha_camille
+          {%- else -%}
+            notify.master_ha_notify
+          {%- endif -%}
+        data:
+          title: "{{ title }}"
+          message: "{{ message }}"
