@@ -11,6 +11,6 @@ binary_sensor:
   - platform: command_line
     name: AC Power
     command: "cat /sys/class/power_supply/AC/online"
-    class: connectivity
+    device_class: connectivity
     payload_on: 1
     payload_off: 0
