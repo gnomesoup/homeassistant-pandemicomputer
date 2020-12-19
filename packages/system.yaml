@@ -11,9 +11,3 @@ binary_sensor:
   - platform: command_line
     name: AC Power
     command: "cat /sys/class/power_supply/AC/online"
-    value_template: >-
-      {% value == 1 -%}
-      on
-      {%- else -%}
-      off
-      {%- endif %}
