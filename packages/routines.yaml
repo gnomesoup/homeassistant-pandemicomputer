@@ -8,6 +8,9 @@ script:
       - service: alarm_control_panel.alarm_arm_away
         data:
           entity_id: alarm_control_panel.alarm
+      - service: input_boolean.turn_on
+        data:
+          entity_id: input_boolean.thermostat_hold_temp
       - service: climate.set_temperature
         data:
           entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
@@ -33,6 +36,9 @@ script:
           entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
           temperature: >-
             {{ states("input_number.heat_setpoint_away") }}
-      - service: input_boolean.turn_on
+      - service: input_boolean.turn_off
+        data:
+          entity_id: input_boolean.thermostat_hold_temp
+      - service: input_boolean.turn_off
         data:
           entity_id: input_boolean.heat_away
