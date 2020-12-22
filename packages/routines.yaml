@@ -1,0 +1,38 @@
+script:
+  leaving_home_short:
+    alias: "Pandemicabin Leaving Home"
+    sequence:
+      - service: media_player.media_stop
+        data:
+          entity_id: media_player.living_room_speaker
+      - service: alarm_control_panel.alarm_arm_away
+        data:
+          entity_id: alarm_control_panel.alarm
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+          temperature: >-
+            {{ states("input_number.heat_setpoint_short_away") }}
+  leaving_home_long:
+    alias: "Pandemicabin Leaving Home"
+    sequence:
+      - service: media_player.media_stop
+        data:
+          entity_id: media_player.living_room_speaker
+      - service: alarm_control_panel.alarm_arm_away
+        data:
+          entity_id: alarm_control_panel.alarm
+      - service: input_boolean.turn_on
+        data:
+          entity_id: input_boolean.heat_away
+  heading_home:
+    alias: "Pandemicabin Heading Home"
+    sequence:
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+          temperature: >-
+            {{ states("input_number.heat_setpoint_away") }}
+      - service: input_boolean.turn_on
+        data:
+          entity_id: input_boolean.heat_away
