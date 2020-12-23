@@ -210,3 +210,22 @@ automation:
       data: {}
       entity_id: input_boolean.thermostat_hold_temp
     mode: single
+
+  - id: '1608690287161'
+    alias: Thermostat set when armed away
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.alarm
+        to: armed_away
+    condition:
+      - condition: state
+        entity_id: input_boolean.heat_away
+        state: 'off'
+    action:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: input_boolean.thermostat_hold_temp
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+          temperature: '{{states("input_number.heat_setpoint_short_away")}}'
