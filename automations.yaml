@@ -30,6 +30,7 @@
       title: Pandemicabin Alert
       message: Carbon monoxide detected
   mode: single
+
 - id: '1605281259031'
   alias: Battery Low Alert
   description: ''
@@ -69,48 +70,6 @@
     - condition: state
       entity_id: 
         - input_boolean.notify_on_door_window_events
-      state: "on"
-  action:
-    - service: notify.gmail
-      data_template:
-        title: Pandemicabin Alert
-        message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
-    - service: alarm_control_panel.alarm_trigger
-      data:
-        entity_id: alarm_control_panel.alarm
-- id: "1605491801008"
-  alias: Notify on motion house
-  trigger:
-    - platform: state
-      entity_id: 
-        - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected_2
-      from: "off"
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: 
-        - input_boolean.notify_on_motion
-      state: "on"
-  action:
-    - service: notify.gmail
-      data_template:
-        title: Pandemicabin Alert
-        message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
-    - service: alarm_control_panel.alarm_trigger
-      data:
-        entity_id: alarm_control_panel.alarm
-- id: "1605492586935"
-  alias: Notify on motion garage
-  trigger:
-    - platform: state
-      entity_id: 
-        - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected
-      from: "off"
-      to: "on"
-  condition:
-    - condition: state
-      entity_id:
-        - input_boolean.notify_on_motion_garage
       state: "on"
   action:
     - service: notify.gmail

@@ -1,0 +1,45 @@
+automation:
+  - id: "1605491801008"
+    alias: Notify on motion house
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected_2
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: 
+          - input_boolean.notify_on_motion
+        state: "on"
+    action:
+      - service: script.notify_conditional
+        data_template:
+          recipient: all
+          title: Pandemicabin Alert
+          message: 'Motion detected on {{state_attr(trigger.entity_id, "friendly_name")}}'
+      - service: alarm_control_panel.alarm_trigger
+        data:
+          entity_id: alarm_control_panel.alarm
+  - id: "1605492586935"
+    alias: Notify on motion garage
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id:
+          - input_boolean.notify_on_motion_garage
+        state: "on"
+    action:
+      - service: script.notify_conditional
+        data:
+          recipient: all
+          title: Pandemicabin Alert
+          message: 'Motion detected on {{state_attr(trigger.entity_id, "friendly_name")}}'
+      - service: alarm_control_panel.alarm_trigger
+        data:
+          entity_id: alarm_control_panel.alarm
