@@ -1,0 +1,44 @@
+automation:
+  - id: '1605281259031'
+    alias: Battery Low Alert
+    description: ''
+    mode: parallel
+    trigger:
+      - platform: numeric_state
+        entity_id: 
+          - sensor.lumi_lumi_weather_5aac8205_power
+          - sensor.lumi_lumi_weather_64aa8205_power
+          - sensor.samjin_multi_0e220d01_power
+          - sensor.samjin_multi_cc1d0d01_power
+          - sensor.samjin_multi_dd210d01_power
+          - sensor.samjin_multi_fcd00d01_power
+          - sensor.gc_tbz48_battery_powered_z_wave_thermostat_battery_level
+          - sensor.unknown_type_0001_id_0003_battery_level
+          - sensor.zse40_4_in_1_sensor_battery_level
+          - sensor.lumi_lumi_sensor_magnet_aq2_e4a8a902_power
+        below: 40
+    action:
+    - service: notify.persistent_notification
+      data:
+        title: Battery Low Alert
+        message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.to_state.state}}%'
+  
+  - id: '1609686658948'
+    alias: Battery low notify on alarm change
+    description: 'When alarm state changes to "disarmed" for 1 hour, notify Michael if batteries are low'
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.alarm
+        to: disarmed
+        for: '01:00:00'
+    condition:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: 'off'
+    action:
+      - service: script.notify_conditional
+        data:
+          recipient: michael
+          title: Pandemicabin Alert
+          message: 

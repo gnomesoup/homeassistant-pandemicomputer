@@ -1,0 +1,54 @@
+automation:
+  - id: '1605406740002'
+    alias: Notify on door window event
+    trigger:
+      - platform: state
+        from: "off"
+        to: "on"
+        entity_id:
+          - binary_sensor.samjin_multi_0e220d01_ias_zone
+          - binary_sensor.samjin_multi_cc1d0d01_ias_zone
+          - binary_sensor.samjin_multi_dd210d01_ias_zone
+          - binary_sensor.samjin_multi_fcd00d01_ias_zone
+          - binary_sensor.lumi_lumi_sensor_magnet_aq2_e4a8a902_on_off
+    condition:
+      - condition: state
+        entity_id: 
+          - input_boolean.notify_on_door_window_events
+        state: "on"
+    action:
+      - service: script.notify_conditional
+        data:
+          recipient: all
+          title: Pandemicabin Alert
+          message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
+      - service: alarm_control_panel.alarm_trigger
+        data:
+          entity_id: alarm_control_panel.alarm
+  - id: '1606512448888'
+    alias: Notify doors open too long
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.samjin_multi_0e220d01_ias_zone
+          - binary_sensor.samjin_multi_fcd00d01_ias_zone
+        from:  'off'
+        to: 'on'
+        for: 00:05:00
+    condition:
+      - condition: state
+        entity_id:
+          - input_boolean.guest_mode
+        state: 'off'
+    action:
+      - service: tts.google_translate_say
+        data:
+          entity_id: media_player.living_room_speaker
+          message: >-
+            "The " {{state_attr(trigger.entity_id, "friendly_name")}} " was left open."
+      - service: script.notify_conditional
+        data:
+          recipient: all
+          title: 'Pandemicabin Alerts'
+          message: >-
+            "The " {{state_attr(trigger.entity_id, "friendly_name")}} " was left open."
