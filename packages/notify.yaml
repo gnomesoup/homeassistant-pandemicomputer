@@ -50,6 +50,7 @@ notify:
       - service: gmail
       - service: huawei_lte
 
+automation:
   - id: '1604383268941'
     alias: Notify when smoke detected
     description: ''
