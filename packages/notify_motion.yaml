@@ -14,7 +14,7 @@ automation:
         state: "on"
     action:
       - service: script.notify_conditional
-        data_template:
+        data:
           recipient: all
           title: Pandemicabin Alert
           message: 'Motion detected on {{state_attr(trigger.entity_id, "friendly_name")}}'
