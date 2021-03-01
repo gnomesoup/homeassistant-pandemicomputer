@@ -55,36 +55,38 @@ automation:
     alias: Notify when smoke detected
     description: ''
     trigger:
-    - type: smoke
-      platform: device
-      device_id: d4cd0c36dd3a19c9e5569b206439d88c
-      entity_id: binary_sensor.unknown_type_0001_id_0003_smoke_alarm_smoke_detected
-      domain: binary_sensor
+      - platform: state
+        entity_id: 
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected_2
+        from: "off"
+        to: "on"
     condition: []
     action:
-    - service: script.notify_conditional
-      data:
-        recipient: all
-        title: Pandemicabin Alert
-        message: Smoke Detected
+      - service: script.notify_conditional
+        data:
+          recipient: all
+          title: Pandemicabin Alert
+          message: Smoke Detected
     mode: single
 
   - id: '1604383451997'
     alias: Notify when carbon monoxide detected
     description: ''
     trigger:
-    - type: gas
-      platform: device
-      device_id: d4cd0c36dd3a19c9e5569b206439d88c
-      entity_id: binary_sensor.unknown_type_0001_id_0003_carbon_monoxide_carbon_monoxide_detected
-      domain: binary_sensor
+      - platform: state
+        entity_id: 
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected_2
+        from: "off"
+        to: "on"
     condition: []
     action:
-    - service: script.notify_conditional
-      data:
-        recipient: all
-        title: Pandemicabin Alert
-        message: Carbon monoxide detected
+      - service: script.notify_conditional
+        data:
+          recipient: all
+          title: Pandemicabin Alert
+          message: Carbon monoxide detected
     mode: single
   
 script:

@@ -174,7 +174,7 @@ automation:
     - service: climate.set_temperature
       data:
         temperature: '{{states.input_number.heat_auto_setpoint.state}}'
-      entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+      entity_id: climate.z_wave_plus_thermostat
     mode: single
 
   - id: '1604803745717'
@@ -190,7 +190,7 @@ automation:
     - service: climate.set_temperature
       data:
         temperature: '{{states.input_number.heat_setpoint_away.state}}'
-      entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+      entity_id: climate.z_wave_plus_thermostat
     - service: input_boolean.turn_on
       data: {}
       entity_id: input_boolean.thermostat_hold_temp
@@ -227,5 +227,5 @@ automation:
           entity_id: input_boolean.thermostat_hold_temp
       - service: climate.set_temperature
         data:
-          entity_id: climate.gc_tbz48_battery_powered_z_wave_thermostat_mode
+          entity_id: climate.z_wave_plus_thermostat
           temperature: '{{states("input_number.heat_setpoint_short_away")}}'
