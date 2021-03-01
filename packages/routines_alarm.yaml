@@ -24,7 +24,7 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected_2
+          - binary_sensor.4_in_1_sensor_home_security_motion_detection_2
         from: "on"
         to: "off"
         for: 60
@@ -65,7 +65,7 @@ automation:
       - condition: template
         value_template: >-
           {{ 15 < (as_timestamp(utcnow()) - 
-              as_timestamp(states.binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected_2.last_changed)) }}
+              as_timestamp(states.binary_sensor.4_in_1_sensor_home_security_motion_detection_2.last_changed)) }}
     action:
       - service: alarm_control_panel.alarm_disarm
         data:

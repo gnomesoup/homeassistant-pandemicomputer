@@ -4,7 +4,7 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected_2
+          - binary_sensor.4_in_1_sensor_home_security_motion_detection_2
         from: "off"
         to: "on"
     condition:
@@ -26,7 +26,7 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          - binary_sensor.zse40_4_in_1_sensor_home_security_motion_detected
+          - binary_sensor.4_in_1_sensor_home_security_motion_detection
         from: "off"
         to: "on"
     condition:
