@@ -39,4 +39,4 @@ automation:
         data:
           recipient: michael
           title: Pandemicabin Alert
-          message: 
+          message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.to_state.state}}%'

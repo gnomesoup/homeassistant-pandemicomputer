@@ -64,9 +64,9 @@ automation:
         state: "off"
       - condition: template
         value_template: >-
-          {{ 15 < (as_timestamp(utcnow()) - 
-              as_timestamp(states.binary_sensor.4_in_1_sensor_home_security_motion_detection_2.last_changed)) }}
+          {{ 15 < (as_timestamp(utcnow()) - as_timestamp(state_attr("binary_sensor.4_in_1_sensor_home_security_motion_detection_2","last_changed")) }
     action:
       - service: alarm_control_panel.alarm_disarm
         data:
-          entity_id: alarm_control_panel.alarm
+          entity_id: 
+            - alarm_control_panel.alarm
