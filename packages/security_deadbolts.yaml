@@ -1,0 +1,26 @@
+group:
+  deadbolts:
+    name: All Deadbolts
+    entities:
+      - lock.touchscreen_deadbolt_z_wave_plus
+      - lock.touchscreen_deadbolt_z_wave_plus_2
+
+automation:
+  - id: "1617499867707"
+    alias: Lock doors when alarm is armed
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.alarm
+        from: "disarmed"
+        to: "armed_home"
+      - platform: state
+        entity_id: alarm_control_panel.alarm
+        from: "pending"
+        to: "armed_away"
+    condition: []
+    action:
+      - alias: "Lock all deadbolts"
+        service: lock.lock
+        target:
+          entity_id:
+            - group.deadbolts

@@ -70,3 +70,25 @@ automation:
         data:
           entity_id: 
             - alarm_control_panel.alarm
+  
+  - id: "1617499292370"
+    alias: Alarm disarm when doors unlocked
+    trigger:
+      - platform: state
+        entity_id: 
+          - group.deadbolts
+        from: "locked"
+        to: "unlocked"
+    condition:
+      - alias: "Alarm is armed"
+        condition: not
+        conditions:
+          condition: state
+          entity_id: alarm_control_panel.alarm
+          state: "disarmed"
+    action:
+      - alias: "Turn off alarm"
+        service: alarm_control_panel.alarm_disarm
+        target:
+          entity_id: alarm_control_panel.alarm
+          
