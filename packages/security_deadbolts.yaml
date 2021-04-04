@@ -15,7 +15,7 @@ automation:
         to: "armed_home"
       - platform: state
         entity_id: alarm_control_panel.alarm
-        from: "disarmed"
+        from: "arming"
         to: "armed_away"
     condition: []
     action:
