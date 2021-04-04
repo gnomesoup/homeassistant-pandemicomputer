@@ -19,8 +19,43 @@ automation:
         to: "armed_away"
     condition: []
     action:
-      - alias: "Lock all deadbolts"
-        service: lock.lock
-        target:
-          entity_id:
-            - group.deadbolts
+      - alias: "Lock front door if closed"
+        choose:
+        - conditions:
+            - alias: "Front door closed"
+              condition: state
+              entity_id: 
+                - binary_sensor.samjin_multi_fcd00d01_ias_zone
+              state: "off"
+          sequence:
+            - alias: "Lock front door"
+              service: lock.lock
+              target:
+                entity_id: lock.touchscreen_deadbolt_z_wave_plus
+        default:
+            - alias: "Notify front door not closed"
+              service: homeassistant.turn_on
+              data:
+                recipient: all
+                title: Pandemicabin Alert
+                message: Front door is open. Could not lock door.
+      - alias: "Lock back door if closed"
+        choose:
+        - conditions:
+            - alias: "Back door closed"
+              condition: state
+              entity_id: 
+                - binary_sensor.samjin_multi_fcd00d01_ias_zone
+              state: "off"
+          sequence:
+            - alias: "Lock back door"
+              service: lock.lock
+              target:
+                entity_id: lock.touchscreen_deadbolt_z_wave_plus
+        default:
+            - alias: "Notify back door not closed"
+              service: homeassistant.turn_on
+              data:
+                recipient: all
+                title: Pandemicabin Alert
+                message: Back door is open. Could not lock door.
