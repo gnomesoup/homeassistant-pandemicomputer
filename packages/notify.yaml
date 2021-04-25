@@ -150,4 +150,4 @@ script:
         target:
           entity_id: media_player.notify_camille
         data:
-          volume_level: "{{ volume_level }}"
+          volume_level: "{{ volume }}"
