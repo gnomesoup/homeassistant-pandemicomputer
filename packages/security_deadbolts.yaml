@@ -5,6 +5,16 @@ group:
       - lock.touchscreen_deadbolt_z_wave_plus
       - lock.touchscreen_deadbolt_z_wave_plus_2
 
+text_input:
+  guest_code:
+    name: Guest Code
+    mode: password
+    pattern: "[0-9]{4}"
+  front_door_last_user:
+    name: Front Door Last User
+  back_door_last_user:
+    name: Back Door Last User
+
 automation:
   - id: "1617499867707"
     alias: Lock doors when alarm is armed
