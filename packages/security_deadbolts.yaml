@@ -9,14 +9,15 @@ group:
 input_text:
   guest_code:
     name: Guest Code
-    mode: password
-    pattern: "[0-9]{4}"
+    mode: text
+    pattern: "[0-9]*"
   front_door_last_user:
     name: Front Door Last User
   back_door_last_user:
     name: Back Door Last User
   garager_door_last_user:
     name: Garage Door Last User
+
 
 automation:
   - id: "1617499867707"
@@ -72,3 +73,44 @@ automation:
                 recipient: all
                 title: Pandemicabin Alert
                 message: Back door is open. Could not lock door.
+#   {
+#     "event_type": "zwave_js_notification",
+#     "data": {
+#         "domain": "zwave_js",
+#         "node_id": 10,
+#         "home_id": 3366529647,
+#         "device_id": "d84c908d6dcd5a0939d619bc49c7ee09",
+#         "command_class": 113,
+#         "command_class_name": "Notification",
+#         "label": "Access Control",
+#         "type": 6,
+#         "event": 6,
+#         "event_label": "Keypad unlock operation",
+#         "parameters": {
+#             "userId": 16
+#         }
+#     },
+#     "origin": "LOCAL",
+#     "time_fired": "2021-05-02T13:42:09.204115+00:00",
+#     "context": {
+#         "id": "c0189869f594f7b62efcbc958e10c45e",
+#         "parent_id": null,
+#         "user_id": null
+#     }
+  - id: c806fdb1-7421-4ee0-9ffc-3dcba65ca6f5 
+    alias: Assign guest code
+    trigger:
+      - platform: state
+        entity_id: input_text.guest_code
+    condition: []
+    action:
+      - alias: "Assign guest codes to front/back doors"
+        service: zwave_js.set_lock_usercode
+        target:
+          entity_id: 
+            - lock.touchscreen_deadbolt_z_wave_plus
+            - lock.touchscreen_deadbolt_z_wave_plus_2
+        data:
+          code_slot: '16'
+          usercode: >-
+            {{ states("input_text.guest_code") }}
