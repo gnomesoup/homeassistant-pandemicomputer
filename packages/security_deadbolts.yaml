@@ -4,6 +4,7 @@ group:
     entities:
       - lock.touchscreen_deadbolt_z_wave_plus
       - lock.touchscreen_deadbolt_z_wave_plus_2
+      - lock.touchscreen_deadbolt_z_wave_plus_3
 
 text_input:
   guest_code:
@@ -14,6 +15,8 @@ text_input:
     name: Front Door Last User
   back_door_last_user:
     name: Back Door Last User
+  garager_door_last_user:
+    name: Garage Door Last User
 
 automation:
   - id: "1617499867707"
