@@ -6,7 +6,7 @@ group:
       - lock.touchscreen_deadbolt_z_wave_plus_2
       - lock.touchscreen_deadbolt_z_wave_plus_3
 
-text_input:
+input_text:
   guest_code:
     name: Guest Code
     mode: password
