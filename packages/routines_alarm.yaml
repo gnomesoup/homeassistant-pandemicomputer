@@ -43,33 +43,33 @@ automation:
         data:
           entity_id: alarm_control_panel.alarm
 
-  - id: "1605537922330"
-    alias: Alarm self disarm when armed home
-    trigger:
-      - platform: state
-        entity_id: 
-          - binary_sensor.samjin_multi_fcd00d01_ias_zone
-          - binary_sensor.samjin_multi_0e220d01_ias_zone
-        from: "off"
-        to: "on"
-    condition:
-      - condition: time
-        after: "05:00:00"
-        before: "12:00:00"
-      - condition: state
-        entity_id: alarm_control_panel.alarm
-        state: armed_home
-      - condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
-      # - condition: template
-      #   value_template: >-
-      #     {{ 15 < (as_timestamp(utcnow()) - as_timestamp(state_attr("binary_sensor.4_in_1_sensor_home_security_motion_detection_2","last_changed")) }
-    action:
-      - service: alarm_control_panel.alarm_disarm
-        data:
-          entity_id: 
-            - alarm_control_panel.alarm
+  # - id: "1605537922330"
+  #   alias: Alarm self disarm when armed home
+  #   trigger:
+  #     - platform: state
+  #       entity_id: 
+  #         - binary_sensor.samjin_multi_fcd00d01_ias_zone
+  #         - binary_sensor.samjin_multi_0e220d01_ias_zone
+  #       from: "off"
+  #       to: "on"
+  #   condition:
+  #     - condition: time
+  #       after: "05:00:00"
+  #       before: "12:00:00"
+  #     - condition: state
+  #       entity_id: alarm_control_panel.alarm
+  #       state: armed_home
+  #     - condition: state
+  #       entity_id: input_boolean.guest_mode
+  #       state: "off"
+  #     # - condition: template
+  #     #   value_template: >-
+  #     #     {{ 15 < (as_timestamp(utcnow()) - as_timestamp(state_attr("binary_sensor.4_in_1_sensor_home_security_motion_detection_2","last_changed")) }
+  #   action:
+  #     - service: alarm_control_panel.alarm_disarm
+  #       data:
+  #         entity_id: 
+  #           - alarm_control_panel.alarm
   
   - id: "1617499292370"
     alias: Alarm disarm when doors unlocked
