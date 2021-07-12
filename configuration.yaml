@@ -2,6 +2,11 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - !secret linode_ip
+
 homeassistant:
   legacy_templates: false
   packages: !include_dir_named packages/
