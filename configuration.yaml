@@ -5,7 +5,7 @@ default_config:
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - !secret linode_ip
+    - !secret tinc_ip
 
 homeassistant:
   legacy_templates: false
