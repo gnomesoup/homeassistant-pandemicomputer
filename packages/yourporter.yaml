@@ -1,0 +1,30 @@
+sensor:
+  - platform: imap_email_content
+    server: imap.gmail.com
+    name: yourporter
+    port: 993
+    username: !secret google_imap_username
+    password: !secret google_imap_password
+    # folder: YOUR_FOLDER
+    senders:
+      - hello@yourporter.com
+      - pfammatter@gmail.com
+
+template:
+  - sensor: 
+    - name: "Your Porter Listing"
+      state: >-
+        {{ state_attr("sensor.yourporter", "body") |
+            regex_findall_index("\$listing: (.*)\n")}}
+    - name: "Your Porter Checkin"
+      state: >-
+        {{ state_attr("sensor.yourporter", "body") |
+            regex_findall_index("\$inDate: (.*)\n")}}
+    - name: "Your Porter Checkout"
+      state: >-
+        {{ state_attr("sensor.yourporter", "body") |
+            regex_findall_index("\$outDate: (.*)\n")}}
+    - name: "Your Porter Guest Code"
+      state: >-
+        {{ state_attr("sensor.yourporter", "body") |
+            regex_findall_index("\$guestCode: (\d{4})")}}
