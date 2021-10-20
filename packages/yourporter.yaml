@@ -80,7 +80,7 @@ automation:
           entity_id: input_datetime.guest_checkin
         data:
           datetime: >-
-            {{as_timestamp(states('sensor.your_porter_checkin'))}}
+            {{strptime(as_datetime(states('sensor.your_porter_checkin')), '')}}
 
   - id: 22505103-1d83-4bb5-8711-d4bccd54fbff 
     alias: Your Porter Checkout Update
@@ -99,5 +99,5 @@ automation:
         target:
           entity_id: input_datetime.guest_checkout
         data:
-          timestamp: >-
+          datetime: >-
             {{strptime(as_datetime(states('sensor.your_porter_checkout')), '')}}
