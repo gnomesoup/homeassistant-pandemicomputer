@@ -122,6 +122,11 @@ automation:
         target:
           entity_id:
             - input_boolean.heat_away
+      - alias: "Prep reservation notify"
+        service: notify.master_ha_notify
+        data:
+          title: GetawAframe Reservation
+          message: Prepping Cabin
 
   - id: 30d1b55e-a922-4b59-94cd-933cbf59f0c3 
     alias: Begin Reservation
@@ -142,6 +147,11 @@ automation:
         target:
           entity_id:
             - input_boolean.heat_away
+      - alias: "Begin reservation notify"
+        service: notify.master_ha_notify
+        data:
+          title: GetawAframe Reservation
+          message: Starting reservation
 
   - id: b4d339dd-7c53-471c-a36e-b2448ac46cd4 
     alias: End Reservation
@@ -164,3 +174,8 @@ automation:
         service: alarm_control_panel.alarm_arm_away
         target:
           entity_id: alarm_control_panel.alarm
+      - alias: "End reservation notify"
+        service: notify.master_ha_notify
+        data:
+          title: GetawAframe Reservation
+          message: Ending reservation
