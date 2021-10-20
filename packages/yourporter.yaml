@@ -16,17 +16,17 @@ template:
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
            regex_replace("=\r\n", "") |
-           regex_findall_index("\$listing: ([^\\r]*?)<br>")}}
+           regex_findall_index("\$listing: (.*?)<br>")}}
     - name: "Your Porter Checkin"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
            regex_replace("=\r\n", "") |
-           regex_findall_index("\$inDate: ([^\r]*?)<br>")}}
+           regex_findall_index("\$inDate: (.*?)<br>")}}
     - name: "Your Porter Checkout"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
            regex_replace("=\r\n", "") |
-           regex_findall_index("\$outDate: ([^\r]*?)<br>")}}
+           regex_findall_index("\$outDate: (.*?)<br>")}}
     - name: "Your Porter Guest Code"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
