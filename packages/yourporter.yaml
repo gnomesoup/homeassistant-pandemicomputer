@@ -15,16 +15,33 @@ template:
     - name: "Your Porter Listing"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
-            regex_findall_index("\$listing: (.*)\n")}}
+            regex_findall_index("\$listing: (.*?)<br>")}}
     - name: "Your Porter Checkin"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
-            regex_findall_index("\$inDate: (.*)\n")}}
+            regex_findall_index("\$inDate: (.*?)<br>")}}
     - name: "Your Porter Checkout"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
-            regex_findall_index("\$outDate: (.*)\n")}}
+            regex_findall_index("\$outDate: (.*?)<br>")}}
     - name: "Your Porter Guest Code"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
             regex_findall_index("\$guestCode: (\d{4})")}}
+
+automation:
+  - id: d416b9e5-3e87-4ecc-b4c7-eaf18dffcf5c
+    alias: Your Porter Guest Code Update
+    trigger:
+      - platform: state
+        entity_id: sensor.your_porter_guest_code
+    condition:
+      - alias: "Listing is GetawAframe"
+        condition: state
+        entity_id: sensor.your_porter_listing
+        state: "GetawAframe"
+    action:
+      - alias: "Update Guest Code"
+        service: input_text.set_value
+        target:
+          entity_id: input_text.guest_code
