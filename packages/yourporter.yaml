@@ -5,7 +5,7 @@ sensor:
     port: 993
     username: !secret google_imap_username
     password: !secret google_imap_password
-    # folder: YOUR_FOLDER
+    folder: GetawAframe
     senders:
       - hello@yourporter.com
       - pfammatter@gmail.com
@@ -15,15 +15,18 @@ template:
     - name: "Your Porter Listing"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
-            regex_findall_index("\$listing: (.*?)<br>")}}
+           regex_replace("=\r\n", "") |
+           regex_findall_index("\$listing: ([^\\r]*?)<br>")}}
     - name: "Your Porter Checkin"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
-            regex_findall_index("\$inDate: (.*?)<br>")}}
+           regex_replace("=\r\n", "") |
+           regex_findall_index("\$inDate: ([^\r]*?)<br>")}}
     - name: "Your Porter Checkout"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
-            regex_findall_index("\$outDate: (.*?)<br>")}}
+           regex_replace("=\r\n", "") |
+           regex_findall_index("\$outDate: ([^\r]*?)<br>")}}
     - name: "Your Porter Guest Code"
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
