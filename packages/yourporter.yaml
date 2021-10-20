@@ -100,4 +100,4 @@ automation:
           entity_id: sensor.guest_checkout
         data:
           timestamp: >-
-            {{as_timestamp(states('sensor.your_porter_checkout'))}}
+            {{strptime(as_datetime(states('sensor.your_porter_checkout')), '')}}
