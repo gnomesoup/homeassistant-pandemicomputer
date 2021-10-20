@@ -33,7 +33,7 @@ template:
             regex_findall_index("\$guestCode: (\d{4})")}}
     - name: "Guest Prep Time"
       state: >-
-        {{ states('input_datetime.guest_checkin') - timedelta(hours=3)}}
+        {{ as_datetime(states('input_datetime.guest_checkin')) - timedelta(hours = 45) }}
 
 input_datetime:
   guest_checkin:
