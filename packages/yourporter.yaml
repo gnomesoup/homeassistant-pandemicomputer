@@ -79,7 +79,8 @@ automation:
         target:
           entity_id: sensor.guest_checkin
         data:
-          datetime: "{{as_datetime(states('sensor.your_porter_checkin'))}}"
+          datetime: >-
+            {{as_timestamp(states('sensor.your_porter_checkin'))}}
 
   - id: 22505103-1d83-4bb5-8711-d4bccd54fbff 
     alias: Your Porter Checkout Update
@@ -98,4 +99,5 @@ automation:
         target:
           entity_id: sensor.guest_checkout
         data:
-          datetime: "{{as_datetime(states('sensor.your_porter_checkout'))}}"
+          timestamp: >-
+            {{as_timestamp(states('sensor.your_porter_checkout'))}}
