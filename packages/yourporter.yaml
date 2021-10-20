@@ -38,6 +38,7 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.your_porter_guest_code
+        for: "00:10:00"
     condition:
       - alias: "Listing is GetawAframe"
         condition: state
@@ -48,3 +49,5 @@ automation:
         service: input_text.set_value
         target:
           entity_id: input_text.guest_code
+        data:
+          value: "{{states('sensor.your_porter_guest_code')}}"
