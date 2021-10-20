@@ -32,6 +32,16 @@ template:
         {{ state_attr("sensor.yourporter", "body") |
             regex_findall_index("\$guestCode: (\d{4})")}}
 
+input_datetime:
+  guest_checkin:
+    name: Guest Checkin
+    has_date: true
+    has_time: true
+  guest_checkout:
+    name: Guest Checkout
+    has_date: true
+    has_time: true
+
 automation:
   - id: d416b9e5-3e87-4ecc-b4c7-eaf18dffcf5c
     alias: Your Porter Guest Code Update
@@ -51,3 +61,40 @@ automation:
           entity_id: input_text.guest_code
         data:
           value: "{{states('sensor.your_porter_guest_code')}}"
+  - id: 224608a7-a692-4872-a5f8-2a78865592b1
+    alias: Your Porter Checkin Update
+    trigger:
+      - platform: state
+        entity_id: sensor.your_porter_checkin
+        for: "00:10:00"
+    condition:
+      - alias: "Listing is GetawAframe"
+        condition: state
+        entity_id: sensor.your_porter_listing
+        state: "GetawAframe"
+    action:
+      - alias: "Update guest checkin"
+        service: input_datetime.set_datetime
+        target:
+          entity_id: sensor.guest_checkin
+        data:
+          value: "{{as_datetime(states('sensor.your_porter_checkin'))}}"
+
+  - id: 22505103-1d83-4bb5-8711-d4bccd54fbff 
+    alias: Your Porter Checkout Update
+    trigger:
+      - platform: state
+        entity_id: sensor.your_porter_checkout
+        for: "00:10:00"
+    condition:
+      - alias: "Listing is GetawAframe"
+        condition: state
+        entity_id: sensor.your_porter_listing
+        state: "GetawAframe"
+    action:
+      - alias: "Update guest checkout"
+        service: input_datetime.set_datetime
+        target:
+          entity_id: sensor.guest_checkout
+        data:
+          value: "{{as_datetime(states('sensor.your_porter_checkout'))}}"
