@@ -31,6 +31,9 @@ template:
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
             regex_findall_index("\$guestCode: (\d{4})")}}
+    - name: "Guest Prep Time"
+      state: >-
+        {{ states('input_datetime.guest_checkin') - timedelta(hours=3)}}
 
 input_datetime:
   guest_checkin:
@@ -101,3 +104,63 @@ automation:
         data:
           datetime: >-
             {{strptime(as_datetime(states('sensor.your_porter_checkout')), '')}}
+
+  - id: f4513555-a729-4f27-9a35-70de349f97a5 
+    alias: Prep Reservation
+    trigger:
+      - platform: time
+        at: sensor.guest_prep_time
+    condition: []
+    action:
+      - alias: "Prep reservation turn on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.guest_mode
+      - alias: "Prep reservation turn off"
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - input_boolean.heat_away
+
+  - id: 30d1b55e-a922-4b59-94cd-933cbf59f0c3 
+    alias: Begin Reservation
+    trigger:
+      - platform: time
+        at: input_datetime.guest_checkin
+    condition: []
+    action:
+      - alias: "Begin reservation turn on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.guest_code_enable
+            - input_boolean.guest_mode
+            - input_boolean.thermostat_hold_temp
+      - alias: "Begin reservation turn off"
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - input_boolean.heat_away
+
+  - id: b4d339dd-7c53-471c-a36e-b2448ac46cd4 
+    alias: End Reservation
+    trigger:
+      - platform: time
+        at: input_datetime.guest_checkout
+    condition: []
+    action:
+      - alias: "End reservation turn off"
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - input_boolean.guest_code_enable
+      - alias: "End reservation turn on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.heat_away
+      - alias: "End reservation alarm"
+        service: alarm_control_panel.alarm_arm_away
+        target:
+          entity_id: alarm_control_panel.alarm
