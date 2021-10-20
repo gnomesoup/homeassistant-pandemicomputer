@@ -77,7 +77,7 @@ automation:
       - alias: "Update guest checkin"
         service: input_datetime.set_datetime
         target:
-          entity_id: sensor.guest_checkin
+          entity_id: input_datetime.guest_checkin
         data:
           datetime: >-
             {{as_timestamp(states('sensor.your_porter_checkin'))}}
@@ -97,7 +97,7 @@ automation:
       - alias: "Update guest checkout"
         service: input_datetime.set_datetime
         target:
-          entity_id: sensor.guest_checkout
+          entity_id: input_datetime.guest_checkout
         data:
           timestamp: >-
             {{strptime(as_datetime(states('sensor.your_porter_checkout')), '')}}
