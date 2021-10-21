@@ -34,7 +34,7 @@ template:
     - name: "Guest Prep Time"
       state: >-
         {{ as_datetime(states('input_datetime.guest_checkin'))
-           - timedelta(hours=43, minutes=55) }}
+           - timedelta(hours=2) }}
 
 input_datetime:
   guest_checkin:
@@ -109,8 +109,10 @@ automation:
   - id: f4513555-a729-4f27-9a35-70de349f97a5 
     alias: Prep Reservation
     trigger:
-      - platform: time
-        at: sensor.guest_prep_time
+      - platform: template
+        value_template: >-
+          {{ (now()|as_timestamp|round)
+            - states('sensor.guest_prep_time')|as_timestamp|round == 0}}
     condition: []
     action:
       - alias: "Prep reservation turn on"
@@ -123,6 +125,18 @@ automation:
         target:
           entity_id:
             - input_boolean.heat_away
+      - alias: "Warm up if heat is on"
+        choose:
+        - conditions:
+            condition
+          sequence:
+            action
+        - conditions:
+            condition
+          sequence:
+            action
+        default:
+            action
       - alias: "Prep reservation notify"
         service: notify.master_ha_notify
         data:
