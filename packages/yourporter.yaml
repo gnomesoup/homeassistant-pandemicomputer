@@ -113,7 +113,7 @@ automation:
         value_template: >-
           {{ now().strftime("%Y-%m-%d %H:%M:00")
            == states('sensor.guest_prep_time')}}
-    condition: []
+    # condition: []
     action:
       - alias: "Prep reservation turn on"
         service: homeassistant.turn_on
@@ -125,18 +125,18 @@ automation:
         target:
           entity_id:
             - input_boolean.heat_away
-      - alias: "Warm up if heat is on"
-        choose:
-        - conditions:
-            condition
-          sequence:
-            action
-        - conditions:
-            condition
-          sequence:
-            action
-        default:
-            action
+      # - alias: "Warm up if heat is on"
+      #   choose:
+      #   - conditions:
+      #       condition
+      #     sequence:
+      #       action
+      #   - conditions:
+      #       condition
+      #     sequence:
+      #       action
+      #   default:
+      #       action
       - alias: "Prep reservation notify"
         service: notify.master_ha_notify
         data:
@@ -148,7 +148,7 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.guest_checkin
-    condition: []
+    # condition: []
     action:
       - alias: "Begin reservation turn on"
         service: homeassistant.turn_on
