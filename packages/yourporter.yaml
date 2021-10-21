@@ -115,28 +115,31 @@ automation:
            == states('sensor.guest_prep_time')}}
     # condition: []
     action:
-      - alias: "Prep reservation turn on"
-        service: homeassistant.turn_on
-        target:
-          entity_id:
-            - input_boolean.guest_mode
       - alias: "Prep reservation turn off"
         service: homeassistant.turn_off
         target:
           entity_id:
             - input_boolean.heat_away
-      # - alias: "Warm up if heat is on"
-      #   choose:
-      #   - conditions:
-      #       condition
-      #     sequence:
-      #       action
-      #   - conditions:
-      #       condition
-      #     sequence:
-      #       action
-      #   default:
-      #       action
+      - alias: "Prep reservation turn on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.guest_mode
+            - input_boolean.thermostat_hold_temp
+      - alias: "Warm up if heat is on"
+        choose:
+        - conditions:
+            - alias: "Heat is on"
+              condition: state
+              entity_id: climate.z_wave_plus_thermostat
+              state: "heat"
+          sequence:
+            - alias: "Set heatpoint"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                temperature: '{{states("input_number.guest_heat_setpoint")}}'
       - alias: "Prep reservation notify"
         service: notify.master_ha_notify
         data:
