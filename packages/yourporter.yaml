@@ -111,8 +111,8 @@ automation:
     trigger:
       - platform: template
         value_template: >-
-          {{ (now()|as_timestamp|round)
-            - states('sensor.guest_prep_time')|as_timestamp|round == 0}}
+          {{ now().strftime("%Y-%m-%d %H:%M:00")
+           == states('sensor.guest_prep_time')}}
     condition: []
     action:
       - alias: "Prep reservation turn on"
