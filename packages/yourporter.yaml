@@ -31,11 +31,11 @@ template:
       state: >-
         {{ state_attr("sensor.yourporter", "body") |
             regex_findall_index("\$guestCode: (\d{4})")}}
-    - name: "Guest Prep Time"
-      entity_id: 
-      state: >-
-        {{ as_datetime(states('input_datetime.guest_checkin'))
-           - timedelta(hours=states('input_number.guest_prep_offset')|float) }}
+    # - name: "Guest Prep Time"
+    #   entity_id: 
+    #   state: >-
+    #     {{ as_datetime(states('input_datetime.guest_checkin'))
+    #        - timedelta(hours=states('input_number.guest_prep_offset')|float) }}
 
 input_datetime:
   guest_checkin:
