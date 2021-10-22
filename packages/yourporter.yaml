@@ -34,7 +34,7 @@ template:
     - name: "Guest Prep Time"
       state: >-
         {{ as_datetime(states('input_datetime.guest_checkin'))
-           - timedelta(hours=2) }}
+           - timedelta(hours=input_number.guest_prep_offset) }}
 
 input_datetime:
   guest_checkin:
@@ -45,6 +45,16 @@ input_datetime:
     name: Guest Checkout
     has_date: true
     has_time: true
+
+input_number:
+  guest_prep_offset:
+    name: Guest Prep Offset (hours)
+    initial: 2
+    min: 0
+    max: 48
+    step: 0.5
+    unit_of_measurement: hours
+
 
 automation:
   - id: d416b9e5-3e87-4ecc-b4c7-eaf18dffcf5c
