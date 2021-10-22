@@ -93,6 +93,10 @@ automation:
       - wed
       - thu
       - fri
+    - alias: "Guest mode off"
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
     action:
     - service: input_number.set_value
       data:
@@ -131,6 +135,10 @@ automation:
       weekday:
       - sat
       - sun
+    - alias: "Guest mode off"
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
     action:
     - service: input_number.set_value
       data:
@@ -149,6 +157,10 @@ automation:
       weekday:
       - fri
       - sat
+    - alias: "Guest mode off"
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
     action:
     - service: input_number.set_value
       data:
@@ -171,10 +183,24 @@ automation:
       entity_id: input_boolean.thermostat_hold_temp
       state: 'off'
     action:
-    - service: climate.set_temperature
-      data:
-        temperature: '{{states.input_number.heat_auto_setpoint.state}}'
-      entity_id: climate.z_wave_plus_thermostat
+      - alias: "choose alias (name)"
+        choose:
+          - conditions:
+            - alias: "condition alias (name)"
+              condition: state
+              entity_id: input_boolean.guest_mode
+              state: "on"
+            sequence:
+              - service: climate.set_temperature
+                data:
+                  temperature: '{{states("input_number.guest_heat_setpoint")}}'
+                target:
+                  entity_id: climate.z_wave_plus_thermostat
+        default:
+        - service: climate.set_temperature
+          data:
+            temperature: '{{states("input_number.heat_auto_setpoint")}}'
+          entity_id: climate.z_wave_plus_thermostat
     mode: single
 
   - id: '1604803745717'
@@ -200,15 +226,15 @@ automation:
     alias: Thermostat set when return
     description: ''
     trigger:
-    - platform: state
-      entity_id: input_boolean.heat_away
-      from: 'on'
-      to: 'off'
+      - platform: state
+        entity_id: input_boolean.heat_away
+        from: 'on'
+        to: 'off'
     condition: []
     action:
-    - service: input_boolean.turn_off
-      data: {}
-      entity_id: input_boolean.thermostat_hold_temp
+      - service: input_boolean.turn_off
+        data: {}
+        entity_id: input_boolean.thermostat_hold_temp
     mode: single
 
   - id: '1608690287161'
