@@ -67,7 +67,7 @@ automation:
       - alias: "Listing is GetawAframe"
         condition: state
         entity_id: sensor.your_porter_listing
-        state: "GetawAframe"
+        state: "Getawaframe"
     action:
       - alias: "Update Guest Code"
         service: input_text.set_value
@@ -86,7 +86,7 @@ automation:
       - alias: "Listing is GetawAframe"
         condition: state
         entity_id: sensor.your_porter_listing
-        state: "GetawAframe"
+        state: "Getawaframe"
     action:
       - alias: "Update guest checkin"
         service: input_datetime.set_datetime
@@ -103,10 +103,10 @@ automation:
         entity_id: sensor.your_porter_checkout
         for: "00:10:00"
     condition:
-      - alias: "Listing is GetawAframe"
+      - alias: "Listing is Getawaframe"
         condition: state
         entity_id: sensor.your_porter_listing
-        state: "GetawAframe"
+        state: "Getawaframe"
     action:
       - alias: "Update guest checkout"
         service: input_datetime.set_datetime
@@ -153,7 +153,7 @@ automation:
       - alias: "Prep reservation notify"
         service: notify.master_ha_notify
         data:
-          title: GetawAframe Reservation
+          title: Getawaframe Reservation
           message: Prepping Cabin
 
   - id: 30d1b55e-a922-4b59-94cd-933cbf59f0c3 
@@ -178,7 +178,7 @@ automation:
       - alias: "Begin reservation notify"
         service: notify.master_ha_notify
         data:
-          title: GetawAframe Reservation
+          title: Getawaframe Reservation
           message: Starting reservation
 
   - id: b4d339dd-7c53-471c-a36e-b2448ac46cd4 
@@ -205,5 +205,5 @@ automation:
       - alias: "End reservation notify"
         service: notify.master_ha_notify
         data:
-          title: GetawAframe Reservation
+          title: Getawaframe Reservation
           message: Ending reservation
