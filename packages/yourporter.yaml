@@ -67,7 +67,7 @@ automation:
       - alias: "Listing is GetawAframe"
         condition: state
         entity_id: sensor.your_porter_listing
-        state: "Getawaframe"
+        state: Getawaframe
     action:
       - alias: "Update Guest Code"
         service: input_text.set_value
@@ -86,7 +86,7 @@ automation:
       - alias: "Listing is GetawAframe"
         condition: state
         entity_id: sensor.your_porter_listing
-        state: "Getawaframe"
+        state: Getawaframe
     action:
       - alias: "Update guest checkin"
         service: input_datetime.set_datetime
@@ -106,7 +106,7 @@ automation:
       - alias: "Listing is Getawaframe"
         condition: state
         entity_id: sensor.your_porter_listing
-        state: "Getawaframe"
+        state: Getawaframe
     action:
       - alias: "Update guest checkout"
         service: input_datetime.set_datetime
