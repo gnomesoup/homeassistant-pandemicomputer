@@ -30,6 +30,9 @@ alarm_control_panel:
 shell_command:
   git_pull: 'git pull origin'
 
+remote_homeassistant:
+  instances:
+
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
