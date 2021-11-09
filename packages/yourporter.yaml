@@ -13,6 +13,13 @@ sensor:
 input_text:
   your_porter_email_body:
     name: "Your Porter Email Body"
+    max: 255
+  your_porter_listing:
+    name: "Your Porter Listing"
+  your_porter_checkin:
+    name: "Your Porter Checkin"
+  your_porter_guest_code:
+    name: "Your Porter Guest Code"
 
 template:
   - sensor: 
