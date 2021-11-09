@@ -10,6 +10,10 @@ sensor:
       - hello@yourporter.com
       - pfammatter@gmail.com
 
+input_text:
+  your_porter_email_body:
+    name: "Your Porter Email Body"
+
 template:
   - sensor: 
     - name: "Your Porter Listing"
