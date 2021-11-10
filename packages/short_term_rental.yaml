@@ -202,7 +202,7 @@ automation:
         service: homeassistant.turn_on
         target:
           entity_id:
-            - input_boolean.heat_away
+            - input_boolean.service_mode
       - alias: "End reservation alarm"
         service: alarm_control_panel.alarm_arm_away
         target:
@@ -212,3 +212,61 @@ automation:
         data:
           title: Getawaframe Reservation
           message: Ending reservation
+
+  - id: c1ef9f9d-aad1-4773-90a3-5be513a51d7e 
+    alias: Service has begun
+    trigger:
+      - platform: state
+        entity_id: group.deadbolts
+        from: "unlocked"
+        to: "locked"
+    condition:
+      - alias: "Service mode is on"
+        condition: state
+        entity_id: input_boolean.service_mode
+        state: "on"
+    action:
+      - alias: "Turn on service in progress"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.service_in_progress
+      - alias: "Notify service has begun"
+        service: notify.master_ha_notify
+        data:
+          title: GetawAframe
+          message: Service has begun
+
+  - id: 447c53ea-4fb1-4731-8e46-5bdab98faa92
+    alias: End Service
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.4_in_1_sensor_home_security_motion_detection_2
+        from: "on"
+        to: "off"
+        for: "00:15:00"
+    condition:
+      - alias: "All doors locked"
+        condition: state
+        entity_id: group.deadbolts
+        state: "locked"
+      - alias: "Service is in progress"
+        condition: state
+        entity_id: input_boolean.service_in_progress
+        state: "on"
+    action:
+      - alias: "Set alarm"
+        service: alarm_control_panel.alarm_arm_away
+        target:
+          entity_id: alarm_control_panel.alarm
+      - alias: "Turn off service mode and service in progress"
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - input_boolean.service_in_progress
+            - input_boolean.service_mode
+      - alias: "Notify service ended"
+        service: notify.master_ha_notify
+        data:
+          title: GetawAframe
+          message: Service has ended
