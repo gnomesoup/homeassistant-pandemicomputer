@@ -25,22 +25,22 @@ template:
   - sensor: 
     - name: "Your Porter Listing"
       state: >-
-        {{ state_attr("sensor.yourporter", "body") |
+        {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$listing: (.*?)<br>")}}
     - name: "Your Porter Checkin"
       state: >-
-        {{ state_attr("sensor.yourporter", "body") |
+        {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$inDate: (.*?)<br>")}}
     - name: "Your Porter Checkout"
       state: >-
-        {{ state_attr("sensor.yourporter", "body") |
+        {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$outDate: (.*?)<br>")}}
     - name: "Your Porter Guest Code"
       state: >-
-        {{ state_attr("sensor.yourporter", "body") |
+        {{ states("input_text.your_porter_email_body") |
             regex_findall_index("\$guestCode: (\d{4})")}}
     - name: "Guest Prep Time"
       state: >-
