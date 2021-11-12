@@ -76,7 +76,9 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          - group.deadbolts
+          - lock.touchscreen_deadbolt_z_wave_plus
+          - lock.touchscreen_deadbolt_z_wave_plus_2
+          - lock.node_15
         from: "locked"
         to: "unlocked"
     condition:

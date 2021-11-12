@@ -217,9 +217,8 @@ automation:
     alias: Service has begun
     trigger:
       - platform: state
-        entity_id: group.deadbolts
-        from: "unlocked"
-        to: "locked"
+        entity_id: alarm_control_panel.alarm
+        to: "disarmed"
     condition:
       - alias: "Service mode is on"
         condition: state
@@ -246,9 +245,13 @@ automation:
         to: "off"
         for: "00:15:00"
     condition:
-      - alias: "All doors locked"
+      - alias: "Front door locked"
         condition: state
-        entity_id: group.deadbolts
+        entity_id: lock.touchscreen_deadbolt_z_wave_plus
+        state: "locked"
+      - alias: "Back door locked"
+        condition: state
+        entity_id: lock.touchscreen_deadbolt_z_wave_plus_2
         state: "locked"
       - alias: "Service is in progress"
         condition: state
