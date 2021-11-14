@@ -32,6 +32,11 @@ template:
         {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$outDate: (.*?)<br>")}}
+    - name: "Your Porter Next Checkout"
+      state: >-
+        {{ states("input_text.your_porter_email_body") |
+           regex_replace("=\r\n", "") |
+           regex_findall_index("\$outDate: (.*?)<br>")}}
     - name: "Your Porter Guest Code"
       state: >-
         {{ states("input_text.your_porter_email_body") |
@@ -48,6 +53,10 @@ input_datetime:
     has_time: true
   guest_checkout:
     name: Guest Checkout
+    has_date: true
+    has_time: true
+  guest_next_checkout:
+    name: Next Guest Checkout
     has_date: true
     has_time: true
 
@@ -102,7 +111,7 @@ automation:
             {{strptime(as_datetime(states('sensor.your_porter_checkin')), '')}}
 
   - id: 22505103-1d83-4bb5-8711-d4bccd54fbff 
-    alias: Your Porter Checkout Update
+    alias: Your Porter Next Checkout Update
     trigger:
       - platform: state
         entity_id: sensor.your_porter_checkout
@@ -116,10 +125,34 @@ automation:
       - alias: "Update guest checkout"
         service: input_datetime.set_datetime
         target:
-          entity_id: input_datetime.guest_checkout
+          entity_id: input_datetime.guest_next_checkout
         data:
           datetime: >-
             {{strptime(as_datetime(states('sensor.your_porter_checkout')), '')}}
+
+  - id: 47e0c547-98bf-42ab-80cc-aa23ebca052b
+    alias: Your Porter Current Checkout Update
+    trigger:
+      - platform: state
+        entity_id: sensor.your_porter_checkout
+        for: "00:10:00"
+      - platform: state
+        entity_id: input_boolean.guest_mode
+        from: "on"
+        to: "off"
+        for: "00:00:30"
+    condition:
+      - alias: "Guest mode is off"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: Getawaframe
+    action:
+      - alias: "Update current guest checkout"
+        service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.guest_checkout
+        data:
+          datetime: input_datetime.guest_next_checkout
 
   - id: f4513555-a729-4f27-9a35-70de349f97a5 
     alias: Prep Reservation
