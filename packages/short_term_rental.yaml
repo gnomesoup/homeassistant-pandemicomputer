@@ -115,7 +115,7 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.your_porter_checkout
-        for: "00:10:00"
+        for: "00:01:00"
     condition:
       - alias: "Listing is Getawaframe"
         condition: state
@@ -134,8 +134,8 @@ automation:
     alias: Your Porter Current Checkout Update
     trigger:
       - platform: state
-        entity_id: sensor.your_porter_checkout
-        for: "00:10:00"
+        entity_id: input_datetime.guest_checkout
+        for: "00:00:30"
       - platform: state
         entity_id: input_boolean.guest_mode
         from: "on"
