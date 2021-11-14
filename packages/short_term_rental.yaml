@@ -198,6 +198,7 @@ automation:
         target:
           entity_id:
             - input_boolean.guest_code_enable
+            - input_boolean.guest_mode
       - alias: "End reservation turn on"
         service: homeassistant.turn_on
         target:
