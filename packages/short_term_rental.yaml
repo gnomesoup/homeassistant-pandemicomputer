@@ -153,9 +153,8 @@ automation:
         target:
           entity_id: input_datetime.guest_checkout
         data:
-          datetime: >-
-            {{states('input_datetime.guest_next_checkout')}}
-              , '%Y-%m-%d %H:%M:%S')}}
+          timestamp: >-
+            {{states('input_datetime.guest_next_checkout')|as_timestamp}}
 
   - id: f4513555-a729-4f27-9a35-70de349f97a5 
     alias: Prep Reservation
