@@ -128,7 +128,8 @@ automation:
           entity_id: input_datetime.guest_next_checkout
         data:
           datetime: >-
-            {{strptime(as_datetime(states('sensor.your_porter_checkout')), '')}}
+            {{strptime(as_datetime(states('sensor.your_porter_checkout'))
+              , '%Y-%m-%d %H:%M:%S')}}
 
   - id: 47e0c547-98bf-42ab-80cc-aa23ebca052b
     alias: Your Porter Current Checkout Update
@@ -145,14 +146,16 @@ automation:
       - alias: "Guest mode is off"
         condition: state
         entity_id: input_boolean.guest_mode
-        state: Getawaframe
+        state: "off"
     action:
       - alias: "Update current guest checkout"
         service: input_datetime.set_datetime
         target:
           entity_id: input_datetime.guest_checkout
         data:
-          datetime: input_datetime.guest_next_checkout
+          datetime: >-
+            {{states('input_datetime.guest_next_checkout')}}
+              , '%Y-%m-%d %H:%M:%S')}}
 
   - id: f4513555-a729-4f27-9a35-70de349f97a5 
     alias: Prep Reservation
