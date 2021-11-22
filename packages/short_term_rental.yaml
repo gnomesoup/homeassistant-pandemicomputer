@@ -304,6 +304,10 @@ automation:
           entity_id:
             - input_boolean.service_in_progress
             - input_boolean.service_mode
+      - alias: "Turn on heat away"
+        service: homeassistant.turn_on
+        target:
+          entity_id: input_boolean.heat_away
       - alias: "Notify service ended"
         service: notify.master_ha_notify
         data:
