@@ -154,3 +154,25 @@ automation:
                 - lock.touchscreen_deadbolt_z_wave_plus_2
             data:
               code_slot: '16'
+  - id: f229d646-3e9d-4c93-989e-5906b56f8dc4 
+    alias: Notify on garage door lock/unlock
+    trigger:
+      - platform: state
+        entity_id: lock.node_15
+    condition:
+      - condition: or
+        conditions:
+          - alias: "Service mode enabled"
+            condition: state
+            entity_id: input_boolean.service_mode
+            state: "on"
+          - alias: "Guest mode is enabled"
+            condition: state
+            entity_id: input_boolean.guest_mode
+            state: "on"
+    action:
+      - alias: "Notify grown ups"
+        service: notify.master_ha_notify
+        data:
+          title: Pandemicabin Alert
+          message: Garage door was {{ trigger.to_state.state }}
