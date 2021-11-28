@@ -293,6 +293,10 @@ automation:
         condition: state
         entity_id: input_boolean.service_in_progress
         state: "on"
+      - alias: "Service is in progress"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
     action:
       - alias: "Set alarm"
         service: alarm_control_panel.alarm_arm_away
