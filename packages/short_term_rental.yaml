@@ -204,23 +204,8 @@ automation:
         at: input_datetime.guest_checkin
     # condition: []
     action:
-      - alias: "Begin reservation turn on"
-        service: homeassistant.turn_on
-        target:
-          entity_id:
-            - input_boolean.guest_code_enable
-            - input_boolean.guest_mode
-            - input_boolean.thermostat_hold_temp
-      - alias: "Begin reservation turn off"
-        service: homeassistant.turn_off
-        target:
-          entity_id:
-            - input_boolean.heat_away
-      - alias: "Begin reservation notify"
-        service: notify.master_ha_notify
-        data:
-          title: Getawaframe Reservation
-          message: Starting reservation
+      - alias: "Run start reservation script"
+        service: script.str_start_reservation
 
   - id: b4d339dd-7c53-471c-a36e-b2448ac46cd4 
     alias: End Reservation
@@ -229,26 +214,8 @@ automation:
         at: input_datetime.guest_checkout
     condition: []
     action:
-      - alias: "End reservation turn off"
-        service: homeassistant.turn_off
-        target:
-          entity_id:
-            - input_boolean.guest_code_enable
-            - input_boolean.guest_mode
-      - alias: "End reservation turn on"
-        service: homeassistant.turn_on
-        target:
-          entity_id:
-            - input_boolean.service_mode
-      - alias: "End reservation alarm"
-        service: alarm_control_panel.alarm_arm_away
-        target:
-          entity_id: alarm_control_panel.alarm
-      - alias: "End reservation notify"
-        service: notify.master_ha_notify
-        data:
-          title: Getawaframe Reservation
-          message: Ending reservation
+      - alias: "Run end reservation script"
+        service: script.str_end_reservation
 
   - id: c1ef9f9d-aad1-4773-90a3-5be513a51d7e 
     alias: Service has begun
@@ -262,16 +229,8 @@ automation:
         entity_id: input_boolean.service_mode
         state: "on"
     action:
-      - alias: "Turn on service in progress"
-        service: homeassistant.turn_on
-        target:
-          entity_id:
-            - input_boolean.service_in_progress
-      - alias: "Notify service has begun"
-        service: notify.master_ha_notify
-        data:
-          title: GetawAframe
-          message: Service has begun
+      - alias: "Run start service script"
+        service: script.str_start_service
 
   - id: 447c53ea-4fb1-4731-8e46-5bdab98faa92
     alias: End Service
@@ -299,6 +258,72 @@ automation:
         entity_id: input_boolean.guest_mode
         state: "off"
     action:
+      - alias: "Run end reserveration script"
+        service: script.str_end_service
+
+script:
+  str_start_reservation:
+    alias: "Start Reservation"
+    sequence:
+      - alias: "Begin reservation turn on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.guest_code_enable
+            - input_boolean.guest_mode
+            - input_boolean.thermostat_hold_temp
+      - alias: "Begin reservation turn off"
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - input_boolean.heat_away
+      - alias: "Begin reservation notify"
+        service: notify.master_ha_notify
+        data:
+          title: Getawaframe Reservation
+          message: Starting reservation
+
+  str_end_reservation:
+    alias: "End Reservation"
+    sequence:
+      - alias: "End reservation turn off"
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - input_boolean.guest_code_enable
+            - input_boolean.guest_mode
+      - alias: "End reservation turn on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.service_mode
+      - alias: "End reservation alarm"
+        service: alarm_control_panel.alarm_arm_away
+        target:
+          entity_id: alarm_control_panel.alarm
+      - alias: "End reservation notify"
+        service: notify.master_ha_notify
+        data:
+          title: Getawaframe Reservation
+          message: Ending reservation
+
+  str_start_service:
+    alias: "Start Service"
+    sequence:
+      - alias: "Turn on service in progress"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.service_in_progress
+      - alias: "Notify service has begun"
+        service: notify.master_ha_notify
+        data:
+          title: GetawAframe
+          message: Service has begun
+
+  str_end_service:
+    alias: "End Service"
+    sequence:
       - alias: "Set alarm"
         service: alarm_control_panel.alarm_arm_away
         target:
