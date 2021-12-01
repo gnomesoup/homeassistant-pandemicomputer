@@ -65,7 +65,7 @@ automation:
       device_id: cb2cb27897a4790cb66cbe22ee77ed15
       entity_id: sensor.lumi_lumi_weather_64aa8205_temperature
       domain: sensor
-      below: 50
+      below: 45
       for:
         hours: 0
         minutes: 0
