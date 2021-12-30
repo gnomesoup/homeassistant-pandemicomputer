@@ -147,8 +147,30 @@ automation:
            == states('sensor.guest_prep_time')}}
     # condition: []
     action:
-      - alias: "Run prep reservation script"
-        service: script.str_prep_reservation
+      choose:
+        - alias: "Notify if guest mode is on"
+          conditions:
+            - condition: state
+              entity_id: input_boolean.guest_mode
+              state: "on"
+          sequence:
+            - service: notify.master_ha_notify
+              data:
+                title: GetawAframe Alert
+                message: Reservation Prep Error. Previous guest is active.
+        - alias: "Notify if service mode is on"
+          conditions:
+            - condition: state
+              entity_id: input_boolean.service_mode
+              state: "on"
+          sequence:
+            - service: notify.master_ha_notify
+              data:
+                title: GetawAframe Alert
+                message: Reservation Prep Error. Service not complete.
+      default:
+        - alias: "Run prep reservation script"
+          service: script.str_prep_reservation
 
   - id: 30d1b55e-a922-4b59-94cd-933cbf59f0c3 
     alias: Begin Reservation
