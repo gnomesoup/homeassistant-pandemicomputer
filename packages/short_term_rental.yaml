@@ -14,6 +14,10 @@ input_text:
   your_porter_email_body:
     name: "Your Porter Email Body"
     max: 255
+  str_off_limit_codes:
+    name: "Off limit guest codes"
+    pattern: "(\\d{4}, ?){0,}\\d{4}"
+    mode: password
 
 template:
   - sensor: 
@@ -71,6 +75,33 @@ input_number:
 
 
 automation:
+  - id: be58d998-b7cb-4ba6-bbf4-2c8897e2908c
+    alias: STR Check Guest Code for Conflict
+    trigger:
+      - platform: state
+        entity_id: sensor.your_porter_guest_code
+        for: "00:10:00"
+    condition: []
+    action:
+      - alias: "Check new code against list of off limit codes"
+        choose:
+        - conditions: >-
+            {{states("sensor.your_porter_guest_code") in
+              states("text_input.str_off_limit_codes")}}
+          sequence:
+            service: notify.master_ha_notify
+            data:
+              title: GetawAframe Alert
+              message: New guest code conflict!
+        - conditions: >-
+            {{states('input_text.guest_code') == 
+              states('sensor.your_porter_guest_code')}}
+          sequence:
+            service: notify.master_ha_notify
+            data:
+              title: GetawAframe Alert
+              message: New guest code conflict!
+
   - id: 224608a7-a692-4872-a5f8-2a78865592b1
     alias: Your Porter Checkin Update
     trigger:
