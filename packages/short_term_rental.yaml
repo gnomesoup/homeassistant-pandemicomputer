@@ -87,7 +87,7 @@ automation:
         choose:
         - conditions: >-
             {{states("sensor.your_porter_guest_code") in
-              states("text_input.str_off_limit_codes")}}
+              states("input_text.str_off_limit_codes")}}
           sequence:
             service: notify.master_ha_notify
             data:
