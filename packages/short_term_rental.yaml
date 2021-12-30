@@ -71,25 +71,6 @@ input_number:
 
 
 automation:
-  - id: d416b9e5-3e87-4ecc-b4c7-eaf18dffcf5c
-    alias: Your Porter Guest Code Update
-    trigger:
-      - platform: state
-        entity_id: sensor.your_porter_guest_code
-        for: "00:10:00"
-    condition:
-      - alias: "Listing is GetawAframe"
-        condition: state
-        entity_id: sensor.your_porter_listing
-        state: Getawaframe
-    action:
-      - alias: "Update Guest Code"
-        service: input_text.set_value
-        target:
-          entity_id: input_text.guest_code
-        data:
-          value: "{{states('sensor.your_porter_guest_code')}}"
-
   - id: 224608a7-a692-4872-a5f8-2a78865592b1
     alias: Your Porter Checkin Update
     trigger:
@@ -166,36 +147,8 @@ automation:
            == states('sensor.guest_prep_time')}}
     # condition: []
     action:
-      - alias: "Prep reservation turn off"
-        service: homeassistant.turn_off
-        target:
-          entity_id:
-            - input_boolean.heat_away
-      - alias: "Prep reservation turn on"
-        service: homeassistant.turn_on
-        target:
-          entity_id:
-            - input_boolean.guest_mode
-            - input_boolean.thermostat_hold_temp
-      - alias: "Warm up if heat is on"
-        choose:
-        - conditions:
-            - alias: "Heat is on"
-              condition: state
-              entity_id: climate.z_wave_plus_thermostat
-              state: "heat"
-          sequence:
-            - alias: "Set heatpoint"
-              service: climate.set_temperature
-              target:
-                entity_id: climate.z_wave_plus_thermostat
-              data:
-                temperature: '{{states("input_number.guest_heat_setpoint")}}'
-      - alias: "Prep reservation notify"
-        service: notify.master_ha_notify
-        data:
-          title: Getawaframe Reservation
-          message: Prepping Cabin
+      - alias: "Run prep reservation script"
+        service: script.str_prep_reservation
 
   - id: 30d1b55e-a922-4b59-94cd-933cbf59f0c3 
     alias: Begin Reservation
@@ -306,6 +259,46 @@ script:
         data:
           title: Getawaframe Reservation
           message: Ending reservation
+
+  str_prep_reservation:
+    alias: "Prep Reservation"
+    sequence:
+      - alias: "Prep reservation turn off"
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - input_boolean.heat_away
+      - alias: "Prep reservation turn on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - input_boolean.guest_mode
+            - input_boolean.thermostat_hold_temp
+      - alias: "Update Guest Code"
+        service: input_text.set_value
+        target:
+          entity_id: input_text.guest_code
+        data:
+          value: "{{states('sensor.your_porter_guest_code')}}"
+      - alias: "Warm up if heat is on"
+        choose:
+        - conditions:
+            - alias: "Heat is on"
+              condition: state
+              entity_id: climate.z_wave_plus_thermostat
+              state: "heat"
+          sequence:
+            - alias: "Set heatpoint"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                temperature: '{{states("input_number.guest_heat_setpoint")}}'
+      - alias: "Prep reservation notify"
+        service: notify.master_ha_notify
+        data:
+          title: Getawaframe Reservation
+          message: Prepping Cabin
 
   str_start_service:
     alias: "Start Service"
