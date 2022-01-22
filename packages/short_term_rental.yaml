@@ -12,36 +12,39 @@ sensor:
 
 input_text:
   your_porter_email_body:
-    name: "Your Porter Email Body"
+    name: "Guesty Email Body"
     max: 255
   str_off_limit_codes:
     name: "Off limit guest codes"
     pattern: "(\\d{4}, ?){0,}\\d{4}"
     mode: password
+  str_guest_code_upcoming:
+    name: "Guest Code: Next Reservation"
+    pattern: "\\d{4}"
 
 template:
   - sensor: 
-    - name: "Your Porter Listing"
+    - name: "Guesty Listing"
       state: >-
         {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$listing: (.*?)<br>")}}
-    - name: "Your Porter Checkin"
+    - name: "Guesty Checkin"
       state: >-
         {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$inDate: (.*?)<br>")}}
-    - name: "Your Porter Checkout"
+    - name: "Guesty Checkout"
       state: >-
         {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$outDate: (.*?)<br>")}}
-    - name: "Your Porter Next Checkout"
+    - name: "Guesty Next Checkout"
       state: >-
         {{ states("input_text.your_porter_email_body") |
            regex_replace("=\r\n", "") |
            regex_findall_index("\$outDate: (.*?)<br>")}}
-    - name: "Your Porter Guest Code"
+    - name: "Guesty Guest Code"
       state: >-
         {{ states("input_text.your_porter_email_body") |
             regex_findall_index("\$guestCode: (\d{4})")}}
@@ -100,10 +103,29 @@ automation:
             service: notify.master_ha_notify
             data:
               title: GetawAframe Alert
-              message: New guest code conflict!
+              message: New guest code matches old guest code!
+
+  - id: c0f0e940-8166-4622-9736-2e04e38d3a1f
+    alias: Guesty Guest Code Update
+    trigger:
+      - platform: state
+        entity_id: sensor.your_porter_guest_code
+        for: "00:10:00"
+    condition:
+      - alias: "Listing is GetawAframe"
+        condition: state
+        entity_id: sensor.your_porter_listing
+        state: Getawaframe
+    action:
+      - alias: "Update guest upcoming guest code"
+        service: input_text.set_value
+        target:
+          entity_id: input_text.str_guest_code_upcoming
+        data:
+          value: "{{states('sensor.your_porter_guest_code')}}"
 
   - id: 224608a7-a692-4872-a5f8-2a78865592b1
-    alias: Your Porter Checkin Update
+    alias: Guesty Checkin Update
     trigger:
       - platform: state
         entity_id: sensor.your_porter_checkin
@@ -124,7 +146,7 @@ automation:
               , '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d 16:00:00')}}
 
   - id: 22505103-1d83-4bb5-8711-d4bccd54fbff
-    alias: Your Porter Next Checkout Update
+    alias: Guesty Next Checkout Update
     trigger:
       - platform: state
         entity_id: sensor.your_porter_checkout
@@ -145,7 +167,7 @@ automation:
               , '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d 10:00:00')}}
 
   - id: 47e0c547-98bf-42ab-80cc-aa23ebca052b
-    alias: Your Porter Current Checkout Update
+    alias: Guesty Current Checkout Update
     trigger:
       - platform: state
         entity_id: input_datetime.guest_next_checkout
@@ -271,6 +293,12 @@ script:
   str_start_reservation:
     alias: "Start Reservation"
     sequence:
+      - alias: "Update Guest Code"
+        service: input_text.set_value
+        target:
+          entity_id: input_text.guest_code
+        data:
+          value: "{{states('input_text.str_guest_code_upcoming')}}"
       - alias: "Begin reservation turn on"
         service: homeassistant.turn_on
         target:
@@ -327,12 +355,6 @@ script:
           entity_id:
             - input_boolean.guest_mode
             - input_boolean.thermostat_hold_temp
-      - alias: "Update Guest Code"
-        service: input_text.set_value
-        target:
-          entity_id: input_text.guest_code
-        data:
-          value: "{{states('sensor.your_porter_guest_code')}}"
       - alias: "Warm up if heat is on"
         choose:
         - conditions:
