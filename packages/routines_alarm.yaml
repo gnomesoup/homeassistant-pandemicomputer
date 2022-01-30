@@ -1,4 +1,32 @@
+template:
+  - binary_sensor:
+    - name: Cleared All
+      icon: mdi:shield-check-outline
+      state: >-
+        {{ states("input_boolean.cleared_doors") == "on" and
+           states("input_boolean.cleared_windows") == "on" and
+           states("input_boolean.cleared_motion") == "on" }}
+    - name: Cleared Doors
+      icon: mdi:shield-check-outline
+      state: >-
+        {{ states("lock.touchscreen_deadbolt_z_wave_plus_2") != "unlocked" and 
+           states("lock.touchscreen_deadbolt_z_wave_plus") != "unlocked" and
+           states("binary_sensor.samjin_multi_fcd00d01_ias_zone") != "on" and
+           states("binary_sensor.samjin_multi_0e220d01_ias_zone") != "on" }}
+    - name: Cleared Windows
+      icon: mdi:shield-check-outline
+      state: >-
+        {{ states("binary_sensor.samjin_multi_cc1d0d01_ias_zone") != "on" and 
+           states("binary_sensor.samjin_multi_dd210d01_ias_zone") != "on" and
+           states("binary_sensor.lumi_lumi_sensor_magnet_aq2_e4a8a902_on_off") != "on" and
+           states("binary_sensor.lumi_lumi_sensor_magnet_aq2_90dfa102_on_off") != "on" }}
+    - name: Cleared Motion
+      icon: mdi:shield-check-outline
+      state: >-
+        {{ states("binary_sensor.4_in_1_sensor_home_security_motion_detection_2") != "on"}}
+
 automation:
+
   - id: "1605457574856"
     alias: Alarm turn on alerts
     trigger:

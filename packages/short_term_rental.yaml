@@ -240,10 +240,37 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.guest_checkout
-    condition: []
+      - platform: state
+        entity_id: binary_sensor.cleared_all
+        from: "off"
+        to: "on"
+        for: "00:60:00"
+    condition:
+      - alias: "Past checkout time"
+        condition: time
+        after: input_datetime.guest_checkout
+      - alias: "Guest mode on"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "on"
     action:
-      - alias: "Run end reservation script"
-        service: script.str_end_reservation
+      - alias: "Check house is cleared"
+        choose:
+        - conditions:
+            - alias: "Check if house marked cleare"
+              condition: state
+              entity_id: binary_sensor.cleared_all
+              state: "off"
+          sequence:
+            - alias: "Notify that home is not in cleared state"
+              service: notify.master_ha_notify
+              data:
+                title: Getawaframe Reservation
+                message: Reservation ended but house not secure
+        default:
+          - alias: "Run end reservation script"
+            service: script.str_end_reservation
+
 
   - id: c1ef9f9d-aad1-4773-90a3-5be513a51d7e 
     alias: Service has begun
