@@ -3,9 +3,9 @@ template:
     - name: Cleared All
       icon: mdi:shield-check-outline
       state: >-
-        {{ states("input_boolean.cleared_doors") == "on" and
-           states("input_boolean.cleared_windows") == "on" and
-           states("input_boolean.cleared_motion") == "on" }}
+        {{ states("binary_sensor.cleared_doors") == "on" and
+           states("binary_sensor.cleared_windows") == "on" and
+           states("binary_sensor.cleared_motion") == "on" }}
     - name: Cleared Doors
       icon: mdi:shield-check-outline
       state: >-
