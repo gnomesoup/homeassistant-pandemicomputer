@@ -293,24 +293,16 @@ automation:
     alias: End Service
     trigger:
       - platform: state
-        entity_id: binary_sensor.4_in_1_sensor_home_security_motion_detection_2
-        from: "on"
-        to: "off"
-        for: "00:15:00"
+        entity_id: binary_sensor.cleared_all
+        from: "off"
+        to: "on"
+        for: "00:60:00"
     condition:
-      - alias: "Front door locked"
-        condition: state
-        entity_id: lock.touchscreen_deadbolt_z_wave_plus
-        state: "locked"
-      - alias: "Back door locked"
-        condition: state
-        entity_id: lock.touchscreen_deadbolt_z_wave_plus_2
-        state: "locked"
       - alias: "Service is in progress"
         condition: state
         entity_id: input_boolean.service_in_progress
         state: "on"
-      - alias: "Service is in progress"
+      - alias: "Not in guest mode"
         condition: state
         entity_id: input_boolean.guest_mode
         state: "off"
@@ -440,3 +432,13 @@ script:
         data:
           title: GetawAframe
           message: Service has ended
+
+alert:
+  str_service_running_long:
+    name: "Service Running Long"
+    message: "GetawAframe Service Running Long"
+    entity_id: input_boolean.service_in_progress
+    state: "on"
+    repeat: 180
+    notifiers:
+      - master_ha_notify
