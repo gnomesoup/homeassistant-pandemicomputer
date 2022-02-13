@@ -247,8 +247,10 @@ automation:
         for: "00:60:00"
     condition:
       - alias: "Past checkout time"
-        condition: time
-        after: input_datetime.guest_checkout
+        condition: template
+        value_template: >-
+          {{ now() | as_timestamp >
+            states('input_datetime.guest_checkout') | as_timestamp }}
       - alias: "Guest mode on"
         condition: state
         entity_id: input_boolean.guest_mode
