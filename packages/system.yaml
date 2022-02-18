@@ -1,7 +1,7 @@
 binary_sensor:
   - name: master_ha_api
     platform: rest
-    resource: http://192.168.100.102:8122/api/
+    resource: http://100.119.81.44:8122/api/
     device_class: connectivity
     headers:
       Authorization: !secret master_ha_header
