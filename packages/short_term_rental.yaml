@@ -82,14 +82,14 @@ automation:
     alias: STR Check Guest Code for Conflict
     trigger:
       - platform: state
-        entity_id: sensor.your_porter_guest_code
+        entity_id: sensor.guesty_guest_code
         for: "00:10:00"
     condition: []
     action:
       - alias: "Check new code against list of off limit codes"
         choose:
         - conditions: >-
-            {{states("sensor.your_porter_guest_code") in
+            {{states("sensor.guesty_guest_code") in
               states("input_text.str_off_limit_codes")}}
           sequence:
             service: notify.master_ha_notify
@@ -98,7 +98,7 @@ automation:
               message: New guest code conflict!
         - conditions: >-
             {{states('input_text.guest_code') == 
-              states('sensor.your_porter_guest_code')}}
+              states('sensor.guesty_guest_code')}}
           sequence:
             service: notify.master_ha_notify
             data:
@@ -109,12 +109,12 @@ automation:
     alias: Guesty Guest Code Update
     trigger:
       - platform: state
-        entity_id: sensor.your_porter_guest_code
+        entity_id: sensor.guesty_guest_code
         for: "00:10:00"
     condition:
       - alias: "Listing is GetawAframe"
         condition: state
-        entity_id: sensor.your_porter_listing
+        entity_id: sensor.guesty_listing
         state: Getawaframe
     action:
       - alias: "Update guest upcoming guest code"
@@ -122,18 +122,18 @@ automation:
         target:
           entity_id: input_text.str_guest_code_upcoming
         data:
-          value: "{{states('sensor.your_porter_guest_code')}}"
+          value: "{{states('sensor.guesty_guest_code')}}"
 
   - id: 224608a7-a692-4872-a5f8-2a78865592b1
     alias: Guesty Checkin Update
     trigger:
       - platform: state
-        entity_id: sensor.your_porter_checkin
+        entity_id: sensor.guesty_checkin
         for: "00:10:00"
     condition:
       - alias: "Listing is GetawAframe"
         condition: state
-        entity_id: sensor.your_porter_listing
+        entity_id: sensor.guesty_listing
         state: Getawaframe
     action:
       - alias: "Update guest checkin"
@@ -142,19 +142,19 @@ automation:
           entity_id: input_datetime.guest_checkin
         data:
           datetime: >-
-            {{strptime(as_datetime(states('sensor.your_porter_checkin'))
+            {{strptime(as_datetime(states('sensor.guesty_checkin'))
               , '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d 16:00:00')}}
 
   - id: 22505103-1d83-4bb5-8711-d4bccd54fbff
     alias: Guesty Next Checkout Update
     trigger:
       - platform: state
-        entity_id: sensor.your_porter_checkout
+        entity_id: sensor.guesty_checkout
         for: "00:00:30"
     condition:
       - alias: "Listing is Getawaframe"
         condition: state
-        entity_id: sensor.your_porter_listing
+        entity_id: sensor.guesty_listing
         state: Getawaframe
     action:
       - alias: "Update guest checkout"
@@ -163,7 +163,7 @@ automation:
           entity_id: input_datetime.guest_next_checkout
         data:
           datetime: >-
-            {{strptime(as_datetime(states('sensor.your_porter_checkout'))
+            {{strptime(as_datetime(states('sensor.guesty_checkout'))
               , '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d 10:00:00')}}
 
   - id: 47e0c547-98bf-42ab-80cc-aa23ebca052b
