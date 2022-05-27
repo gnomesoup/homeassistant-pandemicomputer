@@ -18,8 +18,8 @@ template:
       state: >-
         {{ states("binary_sensor.samjin_multi_cc1d0d01_ias_zone") != "on" and 
            states("binary_sensor.samjin_multi_dd210d01_ias_zone") != "on" and
-           states("binary_sensor.lumi_lumi_sensor_magnet_aq2_e4a8a902_on_off") != "on" and
            states("binary_sensor.lumi_lumi_sensor_magnet_aq2_90dfa102_on_off") != "on" }}
+          #  states("binary_sensor.lumi_lumi_sensor_magnet_aq2_e4a8a902_on_off") != "on" and
     - name: Cleared Motion
       icon: mdi:shield-check-outline
       state: >-
