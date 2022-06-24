@@ -3,6 +3,6 @@ mqtt_eventstream:
   subscribe_topic: homeassistant/master/events
 
 mqtt_statestream:
-  base_topic: pandemicabin
+  base_topic: homeassistant/pandemicabin/states
   publish_attributes: true
   publish_timestamps: true
