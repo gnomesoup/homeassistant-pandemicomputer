@@ -1,3 +1,22 @@
+input_select:
+  notify_level_michael:
+    name: Notify Level Michael
+    options:
+      - Debug
+      - Info
+      - Warn
+      - None
+    icon: mdi:bell-ring
+
+  notify_level_angela:
+    name: Notify Level Angela
+    options:
+      - Debug
+      - Info
+      - Warn
+      - None
+    icon: mdi:bell-ring
+
 notify:
   - name: gmail
     platform: smtp
@@ -110,13 +129,13 @@ script:
           {%- if states("binary_sensor.master_ha_api") != "on" -%}
             notify.local_methods
           {%- elif recipient == "michael" -%}
-            notify.master_ha_michael
+            notify.mobile_app_kashyyyk
           {%- elif recipient == "angela" -%}
-            notify.master_ha_angela
+            notify.mobile_app_iphone_58
           {%- elif recipient == "camille" -%}
             notify.master_ha_camille
           {%- else -%}
-            notify.master_ha_notify
+            notify.notify
           {%- endif -%}
         data:
           title: "{{ title }}"
@@ -193,3 +212,103 @@ script:
           entity_id: media_player.living_room_speaker_2
         data:
           volume_level: "{{ volume }}"
+
+  notify_michael:
+    alias: "Notifications for Michael"
+    fields:
+      title:
+        description: Notification Title
+        example: GetawAframe Alert
+      message:
+        description: Notification Message Body
+        example: Motion on front camera
+      alert_level: 
+        description: 'Level of alertness'
+        example: '[Debug|Info|Warn]'
+        default: Warn
+    variables:
+      set_alert_level: '{{ states("input_select.notify_level_michael")}}'
+      alert_group: >-
+        {% if alert_level == 'Debug' %}
+          {{ ('Debug') }}
+        {% elif alert_level == 'Info' %}
+          {{ ('Debug', 'Info') }}
+        {% else %}
+          {{ ('Debug', 'Info', 'Warn') }}
+        {% endif %}
+    sequence:
+      - alias: "Check if we should send notification"
+        choose:
+        - conditions: '{{ set_alert_level in alert_group }}'
+          sequence:
+            - alias: "Send the notification to mobile"
+              service: notify.mobile_app_kashyyyk
+              data:
+                title:  "{{ title }}"
+                message: "{{ message }}"
+            - alias: "Send the notification to computer"
+              service: notify.mobile_app_coruscant
+              data:
+                title: "{{ title }}"
+                message: "{{ message }}"
+
+  notify_angela:
+    alias: "Notifications for Angela"
+    fields:
+      title:
+        description: Notification Title
+        example: GetawAframe Alert
+      message:
+        description: Notification Message Body
+        example: Motion on front camera
+      alert_level: 
+        description: 'Level of alertness'
+        example: '[Debug|Info|Warn]'
+        default: Warn
+    variables:
+      set_alert_level: '{{ states("input_select.notify_level_angela")}}'
+      alert_group: >-
+        {% if alert_level == 'Debug' %}
+          {{ ('Debug') }}
+        {% elif alert_level == 'Info' %}
+          {{ ('Debug', 'Info') }}
+        {% else %}
+          {{ ('Debug', 'Info', 'Warn') }}
+        {% endif %}
+    sequence:
+      - alias: "Check if we should send notification"
+        choose:
+        - conditions: '{{ set_alert_level in alert_group }}'
+          sequence:
+            - alias: "Send the notification to mobile"
+              service: notify.mobile_app_iphone_58
+              data:
+                title:  "{{ title }}"
+                message: "{{ message }}"
+
+  notify_parents:
+    alias: "Notifications for Parents"
+    fields:
+      title:
+        description: Notification Title
+        example: GetawAframe Alert
+      message:
+        description: Notification Message Body
+        example: Motion on front camera
+      alert_level: 
+        description: 'Level of alertness'
+        example: '[Debug|Info|Warn]'
+        default: Warn
+    sequence:
+      - alias: "Notify Michael"
+        service: script.notify_michael
+        data:
+          title: "{{ title }}"
+          message: "{{ message }}"
+          alert_level: "{{ alert_level }}"
+      - alias: "Notify Angela"
+        service: script.notify_angela
+        data:
+          title: "{{ title }}"
+          message: "{{ message }}"
+          alert_level: "{{ alert_level }}"
