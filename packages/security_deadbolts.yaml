@@ -172,7 +172,8 @@ automation:
             state: "on"
     action:
       - alias: "Notify grown ups"
-        service: notify.master_ha_notify
+        service: script.notify_conditional
         data:
+          recipient: all
           title: Pandemicabin Alert
           message: Garage door was {{ trigger.to_state.state }}

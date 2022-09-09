@@ -20,23 +20,3 @@ automation:
       data:
         title: Battery Low Alert
         message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.to_state.state}}%'
-  
-  - id: '1609686658948'
-    alias: Battery low notify on alarm change
-    description: 'When alarm state changes to "disarmed" for 1 hour, notify Michael if batteries are low'
-    mode: single
-    trigger:
-      - platform: state
-        entity_id: alarm_control_panel.alarm
-        to: disarmed
-        for: '01:00:00'
-    condition:
-      - condition: state
-        entity_id: input_boolean.guest_mode
-        state: 'off'
-    action:
-      - service: script.notify_conditional
-        data:
-          recipient: michael
-          title: Pandemicabin Alert
-          message: '{{state_attr(trigger.entity_id, "friendly_name")}} is at {{trigger.to_state.state}}%'

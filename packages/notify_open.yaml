@@ -17,11 +17,11 @@ automation:
           - input_boolean.notify_on_door_window_events
         state: "on"
     action:
-      - service: script.notify_conditional
+      - service: script.notify_parents
         data:
-          recipient: all
-          title: Pandemicabin Alert
+          title: GetawAframe Alert
           message: '{{state_attr(trigger.entity_id, "friendly_name")}} is open'
+          alert_level: Warn
       - service: alarm_control_panel.alarm_trigger
         data:
           entity_id: alarm_control_panel.alarm

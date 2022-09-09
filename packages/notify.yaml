@@ -82,10 +82,9 @@ automation:
         to: "on"
     condition: []
     action:
-      - service: script.notify_conditional
+      - service: script.notify_parents
         data:
-          recipient: all
-          title: Pandemicabin Alert
+          title: GetawAframe Alert
           message: Smoke Detected
     mode: single
 
@@ -101,11 +100,11 @@ automation:
         to: "on"
     condition: []
     action:
-      - service: script.notify_conditional
+      - service: script.notify_parents
         data:
-          recipient: all
           title: Pandemicabin Alert
           message: Carbon monoxide detected
+          alert_level: Warn
     mode: single
   
 script:

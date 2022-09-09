@@ -92,16 +92,18 @@ automation:
             {{states("sensor.guesty_guest_code") in
               states("input_text.str_off_limit_codes")}}
           sequence:
-            service: notify.master_ha_notify
+            service: script.notify_parents
             data:
+              alert_level: Warn
               title: GetawAframe Alert
               message: New guest code conflict!
         - conditions: >-
             {{states('input_text.guest_code') == 
               states('sensor.guesty_guest_code')}}
           sequence:
-            service: notify.master_ha_notify
+            service: script.notify_parents
             data:
+              alert_level: Warn
               title: GetawAframe Alert
               message: New guest code matches old guest code!
 
@@ -207,8 +209,9 @@ automation:
               entity_id: input_boolean.guest_mode
               state: "on"
           sequence:
-            - service: notify.master_ha_notify
+            - service: script.notify_parents
               data:
+                alert_level: Warn
                 title: GetawAframe Alert
                 message: Reservation Prep Error. Previous guest is active.
         - alias: "Notify if service mode is on"
@@ -217,8 +220,9 @@ automation:
               entity_id: input_boolean.service_mode
               state: "on"
           sequence:
-            - service: notify.master_ha_notify
+            - service: script.notify_parents
               data:
+                alert_level: Warn
                 title: GetawAframe Alert
                 message: Reservation Prep Error. Service not complete.
       default:

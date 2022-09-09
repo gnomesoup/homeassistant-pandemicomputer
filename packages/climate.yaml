@@ -72,11 +72,11 @@ automation:
         seconds: 0
     condition: []
     action:
-    - service: script.notify_conditional
-      data_template:
-        recipient: all
-        title: Pandemicabin Alert
+    - service: script.notify_parents
+      data:
+        title: GetawAframe Alert
         message: '{{state_attr(trigger.entity_id, "friendly_name")}} is {{trigger.to_state.state}}°F'
+        alert_level: Warn
     mode: single
 
   - id: '1604460928355'

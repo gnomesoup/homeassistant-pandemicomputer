@@ -13,10 +13,10 @@ automation:
           - input_boolean.notify_on_motion
         state: "on"
     action:
-      - service: script.notify_conditional
+      - service: script.notify_parents
         data:
-          recipient: all
-          title: Pandemicabin Alert
+          alert_level: Info
+          title: GetawAframe Alert
           message: 'Motion detected on {{state_attr(trigger.entity_id, "friendly_name")}}'
       - service: alarm_control_panel.alarm_trigger
         data:
@@ -35,11 +35,11 @@ automation:
           - input_boolean.notify_on_motion_garage
         state: "on"
     action:
-      - service: script.notify_conditional
+      - service: script.notify_parents
         data:
-          recipient: all
-          title: Pandemicabin Alert
+          title: GetawAframe Alert
           message: 'Motion detected on {{state_attr(trigger.entity_id, "friendly_name")}}'
+          alert_level: Info
       - service: alarm_control_panel.alarm_trigger
         data:
           entity_id: alarm_control_panel.alarm
