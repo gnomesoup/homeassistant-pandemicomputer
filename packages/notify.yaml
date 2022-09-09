@@ -246,11 +246,6 @@ script:
               data:
                 title:  "{{ title }}"
                 message: "{{ message }}"
-            - alias: "Send the notification to computer"
-              service: notify.mobile_app_coruscant
-              data:
-                title: "{{ title }}"
-                message: "{{ message }}"
 
   notify_angela:
     alias: "Notifications for Angela"
