@@ -1,0 +1,31 @@
+automation:
+  - id: 863a560e-c501-43a8-9c77-d523d9c9d7f3
+    alias: Notify about smoke/co
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_alarm_silenced
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_alarm_silenced_2
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected_2
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life_2
+          - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level
+          - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level_2
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced_2
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test_2
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected_2
+          - binary_sensor.zcombo_g_smoke_co_alarm_system_system_hardware_failure
+          - binary_sensor.zcombo_g_smoke_co_alarm_system_system_hardware_failure_2
+        from: "off"
+        to: "on"
+    action:
+      - alias: "Notify parents"
+        service: script.notify_parents
+        data:
+          title: GetawAframe Alert
+          message: "{{ state_attr(trigger.entity_id, 'friendly_name') }}"
+          alert_level: Warn
