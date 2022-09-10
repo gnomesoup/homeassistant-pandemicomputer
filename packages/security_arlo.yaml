@@ -1,0 +1,143 @@
+aarlo:
+  username: !secret arlo_username
+  password: !secret arlo_password
+  refresh_devices_every: 2
+  stream_timeout: 120
+
+alarm_control_panel:
+  - platform: aarlo
+    away_mode_name: armed
+    home_mode_name: Home
+    night_mode_name: night
+    trigger_time: 60
+    alarm_volume: 8
+
+camera:
+  - platform: aarlo
+
+binary_sensor:
+  - platform: aarlo
+    monitored_conditions:
+      - motion
+      - sound
+      - connectivity
+
+sensor:
+  - platform: aarlo
+    monitored_conditions:
+      - total_cameras
+      - last_capture
+      - recent_activity
+      - captured_today
+      - battery_level
+      - signal_strength
+
+light:
+  - platform: aarlo
+
+switch:
+  - platform: aarlo
+    siren: True
+    all_sirens: True
+    snapshot: True
+    siren_volume: 1
+    siren_duration: 10
+
+automation:
+
+  # Keep arlo alarm states in sync with manual alarm panel
+  - alias: NHT Aarlo alarm set from main alarm
+    id: '9219d9bd-48c9-4986-bdb4-13b888aa1378'
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.nht_home_alarm
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("alarm_control_panel.nht_home_alarm") != "pending" or
+             states("alarm_control_panel.nht_home_alarm") != "triggered"}}
+    action:
+      - entity_id: alarm_control_panel.aarlo_nht
+        service: >-
+          {% if trigger.to_state.state == "armed_home" %}
+          alarm_control_panel.alarm_arm_home
+          {% elif trigger.to_state.state == "armed_night" %}
+          alarm_control_panel.alarm_arm_night
+          {% elif trigger.to_state.state == "armed_away" %}
+          alarm_control_panel.alarm_arm_away
+          {% elif is_state("input_boolean.nht_in_home_services", "on") %}
+          alarm_control_panel.alarm_arm_away
+          {% else %}
+          alarm_control_panel.alarm_disarm
+          {% endif %}
+
+  - alias: Pandemicabin Aarlo alarm set from main alarm
+    id: '5af252f1-19ca-4b42-aa6c-918832816ecd'
+    trigger:
+      - platform: state
+        entity_id: 
+          - alarm_control_panel.alarm
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("alarm_control_panel.alarm") != "pending" or
+             states("alarm_control_panel.alarm") != "triggered"}}
+    action:
+      - entity_id: alarm_control_panel.aarlo_pandemicabin
+        service: >-
+          {% if trigger.to_state.state == "armed_home" %}
+          alarm_control_panel.alarm_arm_away
+          {% elif trigger.to_state.state == "armed_away" %}
+          alarm_control_panel.alarm_arm_away
+          {% else %}
+          alarm_control_panel.alarm_arm_home
+          {% endif %}
+  
+  - alias: Turn off arlo alarms after door opens
+    id: 'e36aeba7-be72-43cb-87f9-b57ec571b7d8'
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.samjin_multi_fcd00d01_ias_zone
+          - binary_sensor.samjin_multi_0e220d01_ias_zone
+        from: 'off'
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.aarlo_pandemicabin
+        state: armed_home
+      - condition: state
+        entity_id:
+          - input_boolean.guest_mode
+        state: 'off'
+      - condition: state
+        entity_id:
+          - input_select.closest_home_michael
+        state: 'Pandemicabin'
+    action:
+      - service: alarm_control_panel.alarm_disarm
+        data:
+          entity_id: alarm_control_panel.aarlo_pandemicabin
+      - delay: '00:15:00'
+      - service: alarm_control_panel.alarm_arm_home
+        data:
+          entity_id: alarm_control_panel.aarlo_pandemicabin
+
+  - id: '299dfaac-396c-42c4-b3c1-42b044eea4a9'
+    alias: Pandemicabin turn floodlight on when door opens
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.samjin_multi_fcd00d01_ias_zone
+          - binary_sensor.samjin_multi_0e220d01_ias_zone
+        from: 'off'
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: sun.sun
+        state: below_horizon
+    action:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: 
+            - light.aarlo_garage_floodlight
