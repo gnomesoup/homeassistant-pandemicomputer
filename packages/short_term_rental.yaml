@@ -463,13 +463,3 @@ script:
           title: GetawAframe
           message: Service has ended
           alert_level: Warn
-
-
-alert:
-  str_service_running_long:
-    name: "Service Running Long"
-    message: "GetawAframe Service Running Long"
-    entity_id: input_boolean.service_in_progress
-    state: "on"
-    repeat: 180
-    notifiers: script.notify_parents
