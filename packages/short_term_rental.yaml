@@ -92,20 +92,20 @@ automation:
             {{states("sensor.guesty_guest_code") in
               states("input_text.str_off_limit_codes")}}
           sequence:
-            service: script.notify_parents
-            data:
-              alert_level: Warn
-              title: GetawAframe Alert
-              message: New guest code conflict!
+            - service: script.notify_parents
+              data:
+                alert_level: Warn
+                title: GetawAframe Alert
+                message: New guest code conflict!
         - conditions: >-
             {{states('input_text.guest_code') == 
               states('sensor.guesty_guest_code')}}
           sequence:
-            service: script.notify_parents
-            data:
-              alert_level: Warn
-              title: GetawAframe Alert
-              message: New guest code matches old guest code!
+            - service: script.notify_parents
+              data:
+                alert_level: Warn
+                title: GetawAframe Alert
+                message: New guest code matches old guest code!
 
   - id: c0f0e940-8166-4622-9736-2e04e38d3a1f
     alias: Guesty Guest Code Update
@@ -269,10 +269,11 @@ automation:
               state: "off"
           sequence:
             - alias: "Notify that home is not in cleared state"
-              service: notify.master_ha_notify
+              service: script.notify_parents
               data:
-                title: Getawaframe Reservation
+                title: GetawAframe Reservation
                 message: Reservation ended but house not secure
+                alert_level: Warn
         default:
           - alias: "Run end reservation script"
             service: script.str_end_reservation
@@ -314,6 +315,27 @@ automation:
       - alias: "Run end reserveration script"
         service: script.str_end_service
 
+  - alias: STR Service Running Long
+    id: ff110647-8281-43da-a503-c6ffbd42d3f3
+    trigger:
+      - platform: time_pattern
+        hours: "/2"
+    condition:
+      - alias: "Service has been on for a while"
+        condition: state
+        entity_id: input_boolean.service_in_progress
+        state: "on"
+        for:
+          hours: 3
+    action:
+      - alias: "Notify grownups"
+        service: script.notify_parents
+        data:
+          title: GetawAframe Alert
+          message: Service running long
+          alert_level: Warn
+
+
 script:
   str_start_reservation:
     alias: "Start Reservation"
@@ -337,10 +359,11 @@ script:
           entity_id:
             - input_boolean.heat_away
       - alias: "Begin reservation notify"
-        service: notify.master_ha_notify
+        service: script.notify_parents
         data:
-          title: Getawaframe Reservation
+          title: GetawAframe Reservation
           message: Starting reservation
+          alert_level: Warn
 
   str_end_reservation:
     alias: "End Reservation"
@@ -361,10 +384,11 @@ script:
         target:
           entity_id: alarm_control_panel.alarm
       - alias: "End reservation notify"
-        service: notify.master_ha_notify
+        service: script.notify_parents
         data:
           title: Getawaframe Reservation
           message: Ending reservation
+          alert_level: Warn
 
   str_prep_reservation:
     alias: "Prep Reservation"
@@ -395,10 +419,11 @@ script:
               data:
                 temperature: '{{states("input_number.guest_heat_setpoint")}}'
       - alias: "Prep reservation notify"
-        service: notify.master_ha_notify
+        service: script.notify_parents
         data:
           title: Getawaframe Reservation
           message: Prepping Cabin
+          alert_level: Warn
 
   str_start_service:
     alias: "Start Service"
@@ -409,10 +434,11 @@ script:
           entity_id:
             - input_boolean.service_in_progress
       - alias: "Notify service has begun"
-        service: notify.master_ha_notify
+        service: script.notify_parents
         data:
           title: GetawAframe
           message: Service has begun
+          alert_level: Warn
 
   str_end_service:
     alias: "End Service"
@@ -432,10 +458,12 @@ script:
         target:
           entity_id: input_boolean.heat_away
       - alias: "Notify service ended"
-        service: notify.master_ha_notify
+        service: script.notify_parents
         data:
           title: GetawAframe
           message: Service has ended
+          alert_level: Warn
+
 
 alert:
   str_service_running_long:
@@ -444,5 +472,4 @@ alert:
     entity_id: input_boolean.service_in_progress
     state: "on"
     repeat: 180
-    notifiers:
-      - master_ha_notify
+    notifiers: script.notify_parents
