@@ -46,31 +46,6 @@ switch:
 automation:
 
   # Keep arlo alarm states in sync with manual alarm panel
-  - alias: NHT Aarlo alarm set from main alarm
-    id: '9219d9bd-48c9-4986-bdb4-13b888aa1378'
-    trigger:
-      - platform: state
-        entity_id: alarm_control_panel.nht_home_alarm
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("alarm_control_panel.nht_home_alarm") != "pending" or
-             states("alarm_control_panel.nht_home_alarm") != "triggered"}}
-    action:
-      - entity_id: alarm_control_panel.aarlo_nht
-        service: >-
-          {% if trigger.to_state.state == "armed_home" %}
-          alarm_control_panel.alarm_arm_home
-          {% elif trigger.to_state.state == "armed_night" %}
-          alarm_control_panel.alarm_arm_night
-          {% elif trigger.to_state.state == "armed_away" %}
-          alarm_control_panel.alarm_arm_away
-          {% elif is_state("input_boolean.nht_in_home_services", "on") %}
-          alarm_control_panel.alarm_arm_away
-          {% else %}
-          alarm_control_panel.alarm_disarm
-          {% endif %}
-
   - alias: Pandemicabin Aarlo alarm set from main alarm
     id: '5af252f1-19ca-4b42-aa6c-918832816ecd'
     trigger:
