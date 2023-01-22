@@ -47,7 +47,8 @@ template:
   - binary_sensor:
     - unique_id: thermostat_hvac_action_heating
       name: HVAC Heating
-      state: "{{ state_attr('climate.z_wave_plus_thermostat')}}"
+      state: >-
+        {{ state_attr('climate.z_wave_plus_thermostat', 'hvac_action') == 'heating' }}
 
 automation:
   - id: '1604357736956'
@@ -83,8 +84,8 @@ automation:
         alert_level: Warn
     mode: single
 
-  - id: '1604460928355'
-    alias: Thermostat Automation Weekday 1
+  - alias: Thermostat Automation Weekday 1
+    id: '1604460928355'
     description: Set heat based on a schedule
     trigger:
     - platform: time
@@ -108,8 +109,8 @@ automation:
       entity_id: input_number.heat_auto_setpoint
     mode: single
 
-  - id: '1604461665066'
-    alias: Thermostat Automation Weekday 2
+  - alias: Thermostat Automation Weekday 2
+    id: '1604461665066'
     description: ''
     trigger:
     - platform: time
@@ -226,8 +227,8 @@ automation:
       entity_id: input_boolean.thermostat_hold_temp
     mode: single
 
-  - id: '1604803985924'
-    alias: Thermostat set when return
+  - alias: Thermostat set when return
+    id: '1604803985924'
     description: ''
     trigger:
       - platform: state
@@ -241,8 +242,8 @@ automation:
         entity_id: input_boolean.thermostat_hold_temp
     mode: single
 
-  - id: '1608690287161'
-    alias: Thermostat set when armed away
+  - alias: Thermostat set when armed away
+    id: '1608690287161'
     trigger:
       - platform: state
         entity_id: alarm_control_panel.alarm
