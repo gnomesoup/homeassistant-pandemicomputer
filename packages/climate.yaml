@@ -14,36 +14,40 @@ group:
     entities:
       - sensor.lumi_lumi_weather_64aa8205_humidity
       - sensor.4_in_1_sensor_humidity_2
-sensor:
-  - platform: template
-    sensors:
-      humidity_overall:
-        friendly_name: Overall Humidity
-        unit_of_measurement: "%"
-        device_class: humidity
-        value_template: >-
-          {{
-            ((
-              states("sensor.lumi_lumi_weather_64aa8205_humidity")|float +
-              states("sensor.4_in_1_sensor_humidity_2")|float
-            ) / 2) | round(1)
-          }}
-      temperature_overall:
-        friendly_name: Overall Temperature
-        unit_of_measurement: "°F"
-        device_class: temperature
-        value_template: >-
-          {{ 
-            ((
-              states("sensor.lumi_lumi_weather_64aa8205_temperature")|float * 2 + 
-              states("sensor.4_in_1_sensor_air_temperature_2")|float * 2 +
-              states("sensor.samjin_multi_0e220d01_temperature")|float +
-              states("sensor.samjin_multi_cc1d0d01_temperature")|float * 0.5 +
-              states("sensor.samjin_multi_dd210d01_temperature")|float * 0.5 +
-              states("sensor.samjin_multi_fcd00d01_temperature")|float  + 
-              states("sensor.z_wave_plus_thermostat_air_temperature")|float * 3
-            ) / 10) | round(1)
-          }}
+
+template:
+  - sensor:
+    - unique_id: humidity_overall
+      name: Overall Humidity
+      unit_of_measurement: "%"
+      device_class: humidity
+      state: >-
+        {{
+          ((
+            states("sensor.lumi_lumi_weather_64aa8205_humidity")|float +
+            states("sensor.4_in_1_sensor_humidity_2")|float
+          ) / 2) | round(1)
+        }}
+    - unique_id: temperature_overall
+      name: Overall Temperature
+      unit_of_measurement: "°F"
+      device_class: temperature
+      state: >-
+        {{ 
+          ((
+            states("sensor.lumi_lumi_weather_64aa8205_temperature")|float * 2 + 
+            states("sensor.4_in_1_sensor_air_temperature_2")|float * 2 +
+            states("sensor.samjin_multi_0e220d01_temperature")|float +
+            states("sensor.samjin_multi_cc1d0d01_temperature")|float * 0.5 +
+            states("sensor.samjin_multi_dd210d01_temperature")|float * 0.5 +
+            states("sensor.samjin_multi_fcd00d01_temperature")|float  + 
+            states("sensor.z_wave_plus_thermostat_air_temperature")|float * 3
+          ) / 10) | round(1)
+        }}
+  - binary_sensor:
+    - unique_id: thermostat_hvac_action_heating
+      name: HVAC Heating
+      state: "{{ state_attr('climate.z_wave_plus_thermostat')}}"
 
 automation:
   - id: '1604357736956'
