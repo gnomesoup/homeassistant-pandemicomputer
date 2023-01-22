@@ -22,8 +22,8 @@ input_boolean:
     name: Enable Guest Code
 
 automation:
-  - id: "1617499867707"
-    alias: Lock doors when alarm is armed
+  - alias: Lock doors when alarm is armed
+    id: "1617499867707"
     trigger:
       - platform: state
         entity_id: alarm_control_panel.alarm
@@ -99,8 +99,8 @@ automation:
 #         "parent_id": null,
 #         "user_id": null
 #     }
-  - id: c806fdb1-7421-4ee0-9ffc-3dcba65ca6f5 
-    alias: Deadbolts assign guest code
+  - alias: Deadbolts assign guest code
+    id: c806fdb1-7421-4ee0-9ffc-3dcba65ca6f5 
     trigger:
       - platform: state
         entity_id: input_text.guest_code
@@ -120,8 +120,9 @@ automation:
           code_slot: '16'
           usercode: >-
             {{ states("input_text.guest_code") }}
-  - id: 18063550-c0ff-4018-b7b7-d6897dae43c4 
-    alias: Deadbolts Enable Guest Code
+
+  - alias: Deadbolts Enable Guest Code
+    id: 18063550-c0ff-4018-b7b7-d6897dae43c4 
     trigger:
       - platform: state
         entity_id: input_boolean.guest_code_enable
@@ -154,8 +155,9 @@ automation:
                 - lock.touchscreen_deadbolt_z_wave_plus_2
             data:
               code_slot: '16'
-  - id: f229d646-3e9d-4c93-989e-5906b56f8dc4 
-    alias: Notify on garage door lock/unlock
+
+  - alias: Notify on garage door lock/unlock
+    id: f229d646-3e9d-4c93-989e-5906b56f8dc4 
     trigger:
       - platform: state
         entity_id: lock.node_15
@@ -172,8 +174,8 @@ automation:
             state: "on"
     action:
       - alias: "Notify grown ups"
-        service: script.notify_conditional
+        service: script.notify_parents
         data:
-          recipient: all
           title: Pandemicabin Alert
           message: Garage door was {{ trigger.to_state.state }}
+          alert_level: Warn
