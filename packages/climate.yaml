@@ -282,7 +282,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.hvac_heating
-        from: "heating"
+        from: "on"
+        to: "off"
     condition: []
     action:
       - variables:
