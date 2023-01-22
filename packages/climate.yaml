@@ -50,9 +50,25 @@ template:
       state: >-
         {{ state_attr('climate.z_wave_plus_thermostat', 'hvac_action') == 'heating' }}
 
+counter:
+  hvac_heat_runtime_minutes:
+    name: "HVAC Heating Runtime (minutes)"
+    minimum: 0
+    step: 1
+
+sensor:
+- platform:  history_stats
+  name:  "hvac_run_time"
+  entity_id:  binary_sensor.hvac_heating
+  state:  "on"
+  type:  time
+  end:  "{{ now() }}"
+  duration:
+    hours: 24
+
 automation:
-  - id: '1604357736956'
-    alias: Alert when temperatures are low
+  - alias: Alert when temperatures are low
+    id: '1604357736956'
     description: ''
     trigger:
     - type: temperature
@@ -151,8 +167,8 @@ automation:
       entity_id: input_number.heat_auto_setpoint
     mode: single
 
-  - id: '1604544994545'
-    alias: Thermostat Automation Weekend 2
+  - alias: Thermostat Automation Weekend 2
+    id: '1604544994545'
     description: ''
     trigger:
     - platform: time
@@ -260,3 +276,23 @@ automation:
         data:
           entity_id: climate.z_wave_plus_thermostat
           temperature: '{{states("input_number.heat_setpoint_short_away")}}'
+
+  - alias: HVAC Get Time Heating
+    id: 29e04ec7-90e2-4db8-a601-f2cc4f728353
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.hvac_heating
+        from: "heating"
+    condition: []
+    action:
+      - variables:
+          time_to_add: >-
+            {{ ((now() - trigger.from_state.last_changed).total_seconds() / 60) | int}}
+      - alias: "Increment counter"
+        repeat:
+          count: "{{ time_to_add }}"
+          sequence:
+            service: counter.increment
+            target:
+              entity_id: counter.hvac_heat_runtime_minutes
+            
