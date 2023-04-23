@@ -1,0 +1,7 @@
+calendar:
+  - platform: caldav
+    url: !secret nextcloudCalDavUrl
+    username: !secret nextcloudUser
+    password: !secret nextcloudPassword
+    calendars:
+      - GetAwaFrame
